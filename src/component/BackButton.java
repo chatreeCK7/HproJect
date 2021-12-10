@@ -10,7 +10,7 @@ public class BackButton extends Button{
 	
 	public BackButton() {
 		// TODO Auto-generated constructor stub
-		setPrefSize(37, 37);
+		setPrefSize(37, 36);
 		setStyle(BACK_BUTTON_STYLE);
 	}
 

@@ -29,10 +29,11 @@ public class StartSceneController extends Controller {
 	private static final int WIDTH = 1024;
 	private AnchorPane mainPane;
 	private Scene mainScene;
+	private GameSceneController gameScene;
 	private Stage mainStage;
 
-	private final static int MENU_BUTTONS_START_X = 437;
-	private final static int MENU_BUTTONS_START_Y = 276;
+	private final static int MENU_BUTTONS_START_X = 417;
+	private final static int MENU_BUTTONS_START_Y = 296;
 	
 	private StartSubScene startSubScene;
 	private StartSubScene sceneToHide;
@@ -42,16 +43,20 @@ public class StartSceneController extends Controller {
 			"left_arrow_keycap.png","right_arrow_keycap.png","up_arrow_keycap.png","down_arrow_keycap.png","enter_keycap.png"));
 	public StartSceneController() {
 		// TODO Auto-generated constructor stub
+		gameScene = new GameSceneController();
 		menuBtn = new ArrayList<>();
 		mainPane = new AnchorPane();
 		mainScene = new Scene(mainPane, WIDTH, HEIGHT);
 		mainStage = new Stage();
+		mainStage.setTitle("Hadoz");
 		mainStage.setScene(mainScene);
 		createHowButton();
 		createStartButton();
 		createExitButton();
 		createBackground();
+		createLogo();
 		createSubScene();
+		
 		
 	}
 
@@ -80,7 +85,7 @@ public class StartSceneController extends Controller {
 
 	private void addMenuButton(HaDozButton btn) {
 		btn.setLayoutX(MENU_BUTTONS_START_X);
-		btn.setLayoutY(MENU_BUTTONS_START_Y + menuBtn.size() * 100);
+		btn.setLayoutY(MENU_BUTTONS_START_Y + menuBtn.size() * 70);
 
 		menuBtn.add(btn);
 		mainPane.getChildren().add(btn);
@@ -92,11 +97,7 @@ public class StartSceneController extends Controller {
 		HowToLabel label = new HowToLabel("How To Play");
 		label.setLayoutX(200);
 		label.setLayoutY(-150);
-//		Image A = new Image(keyPath.get(0));Image D = new Image(keyPath.get(1));
-//		Image W = new Image(keyPath.get(2));Image S = new Image(keyPath.get(3));
-//		Image spacebar = new Image(keyPath.get(4));Image left = new Image(keyPath.get(5));
-//		Image right = new Image(keyPath.get(6));Image up = new Image(keyPath.get(7));
-//		Image down = new Image(keyPath.get(8));Image enter = new Image(keyPath.get(9));
+		
 		ImageView panel = new ImageView(new Image("/scene/controller/res/HowToplay.png"));
 		panel.setFitHeight(0.45*panel.prefHeight(1));
         panel.setFitWidth(0.45*panel.prefWidth(1));
@@ -129,6 +130,7 @@ public class StartSceneController extends Controller {
 	
 	private void createStartButton() {
 		HaDozButton sBtn = new HaDozButton("Start !");
+		sBtn.setOnAction(e -> switchScenes(gameScene.getMainScene()));
 		addMenuButton(sBtn);
 	}
 
@@ -160,7 +162,18 @@ public class StartSceneController extends Controller {
 		});
 	}
 	
+	private void switchScenes(Scene scene) {
+		mainStage.setScene(scene);
+	}
+	
 	private void createLogo() {
+		ImageView logo = new ImageView(new Image("/scene/controller/res/another-logo-gif.gif"));
+		logo.setFitHeight(0.9*logo.prefHeight(1));
+        logo.setFitWidth(0.9*logo.prefWidth(1));
+        logo.relocate((double)(240), (double)(70));
+		
+		
+		mainPane.getChildren().add(logo);
 		
 	}
 
