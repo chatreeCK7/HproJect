@@ -12,14 +12,14 @@ public class FireBall extends PowerBall{
 
 	public FireBall(int x, int highLevel, int playerSide) {
 		super(x, highLevel, playerSide);
+		imageView = new ImageView(fireBalll);
 	}
 
 	@Override
 	public void createFirstPowerBall(int count) {
 		System.out.println(count);
 		// TODO Auto-generated method stub
-		double size = 0.04+0.004*count;
-		imageView = new ImageView(fireBalll);
+		double size = 0.05+0.004*count;
 		imageView.setFitHeight(size*imageView.prefHeight(1));
 		imageView.setFitWidth(size*imageView.prefWidth(1));
 	}
