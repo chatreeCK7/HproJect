@@ -36,32 +36,33 @@ public class GameSceneController extends Controller {
 	private static int countPlayer2;
 	private static PowerBall nextBallKen;
 	private static PowerBall nextBallRyu;
-	private EarthBall eB = new EarthBall(100, 100, 5);
-	private FireBall fb = new FireBall(100,100,5);
+//	private EarthBall eB = new EarthBall(100, 100, 5);
+//	private FireBall fB = new FireBall(100,100,5);
+//	private WaterBall wB = new WaterBall(100,100,5);
 	private ImageView kenn;
 	private ImageView ryuu;
 	private int kenPosX = 70;
-	private static int kenPosY ;
-	private int ryuPosX = 900 ;
-	private static int ryuPosY ;
+	private static int kenPosY;
+	private int ryuPosX = 900;
+	private static int ryuPosY;
 	private ArrayList<ArrayList<PowerBall>> p1Ball;
 	private ArrayList<ArrayList<PowerBall>> p2Ball;
 
-	private static AnchorPane mainPane ;
+	private static AnchorPane mainPane;
 	private Scene mainScene;
 	private Stage mainStage;
 	private ThreadMain threadMain;
 	private ImageView firePicRyu = new ImageView(entity.FireBall.getFireballl());
 	private ImageView EarthPicRyu = new ImageView(entity.EarthBall.getEarthball());
 	private ImageView WaterPicRyu = new ImageView(entity.WaterBall.getWaterballl());
-	
+
 	private ImageView firePicKen = new ImageView(entity.FireBall.getFireballl());
 	private ImageView EarthPicKen = new ImageView(entity.EarthBall.getEarthball());
 	private ImageView WaterPicKen = new ImageView(entity.WaterBall.getWaterballl());
 
 	Canvas canvas = new Canvas();
 	GraphicsContext ctx = canvas.getGraphicsContext2D();
-	private static Text txtCount1,txtCount2;
+	private static Text txtCount1, txtCount2;
 	boolean trigger = false;
 
 	public GameSceneController() {
@@ -81,7 +82,6 @@ public class GameSceneController extends Controller {
 		setOnCharged();
 		mainStage.setScene(mainScene);
 		mainStage.setTitle("Hadoz");
-		
 
 	}
 
@@ -95,8 +95,7 @@ public class GameSceneController extends Controller {
 		// TODO Auto-generated method stub
 
 	}
-	
-	
+
 	public Stage getMainStage() {
 		return mainStage;
 	}
@@ -104,7 +103,7 @@ public class GameSceneController extends Controller {
 	public void setMainStage(Stage mainStage) {
 		this.mainStage = mainStage;
 	}
-	
+
 	public Scene getMainScene() {
 		return mainScene;
 	}
@@ -113,90 +112,128 @@ public class GameSceneController extends Controller {
 		this.mainScene = mainScene;
 	}
 
-	
 	public void setOnCharged() {
 		ThreadMain player1Thread = new ThreadMain();
 		mainScene.setOnKeyPressed((KeyEvent e) -> {
 			String new_code = e.getCode().toString();
 			System.out.println(new_code);
-			if(!trigger) {
+			if (!trigger) {
 				if (new_code.equals("SPACE")) {
-					EarthBall fB = new EarthBall(100, 100, 5);
+					FireBall fB = new FireBall(100, getKenPosY(), 5);
+					EarthBall eB = new EarthBall(100, getKenPosY(), 5);
+					WaterBall wB = new WaterBall(100, getKenPosY(), 5);
+					if (nextBallKen==null) {
+						FireBall temp = new FireBall(100, getKenPosY(), 5);
+						temp.setCount(getCountPlayer1());
+						temp.createFirstPowerBall(getCountPlayer1());
+						threadMain.initalizeNewPlayer(temp);
+					} else {
+						nextBallKen.setCount(getCountPlayer1());
+						nextBallKen.setY(getKenPosY());
+						nextBallKen.createFirstPowerBall(getCountPlayer1());
+						threadMain.initalizeNewPlayer(nextBallKen);
+					}
 					int r = randomBall();
 					appearNextBallKen(r);
-					PowerBall pB ;
-					threadMain.initalizeNewPlayer(fB);
+					if (r == 0)
+						nextBallKen = fB;
+					if (r == 1)
+						nextBallKen = eB;
+					if (r == 2)
+						nextBallKen = wB;
 					countPlayer1 = 0;
 					threadMain.updatePlayerCount(countPlayer1, countPlayer2);
-				
+
 				}
-				if(new_code.equals("ENTER")) {
-					WaterBall fB = new WaterBall(950, 100, -5);
+				if (new_code.equals("ENTER")) {
+					FireBall fB = new FireBall(900, getRyuPosY(), -5);
+					EarthBall eB = new EarthBall(900, getRyuPosY(), -5);
+					WaterBall wB = new WaterBall(900, getRyuPosY(), -5);
+					if (nextBallRyu==null) {
+						FireBall temp2 = new FireBall(900, getKenPosY(), -5);
+						temp2.setCount(getCountPlayer2());
+						temp2.createFirstPowerBall(getCountPlayer2());
+						threadMain.initalizeNewPlayer(temp2);
+					} else {
+						nextBallRyu.setY(getRyuPosY());
+						nextBallRyu.setCount(getCountPlayer2());
+						nextBallRyu.createFirstPowerBall(getCountPlayer2());
+						threadMain.initalizeNewPlayer(nextBallRyu);
+					}
 					int r = randomBall();
 					appearNextBallRyu(r);
-					threadMain.initalizeNewPlayer(fB);
+					if (r == 0)
+						nextBallRyu = fB;
+					if (r == 1)
+						nextBallRyu = eB;
+					if (r == 2)
+						nextBallRyu = wB;
 					countPlayer2 = 0;
 					threadMain.updatePlayerCount(countPlayer1, countPlayer2);
 				}
-				if(new_code.equals("A")||new_code.equals("D")) {
-					countPlayer1++;	
+				if (new_code.equals("A") || new_code.equals("D")) {
+					countPlayer1++;
 					threadMain.updatePlayerCount(countPlayer1, countPlayer2);
 				}
-				if(new_code.equals("RIGHT")||new_code.equals("LEFT")) {
+				if (new_code.equals("RIGHT") || new_code.equals("LEFT")) {
 					countPlayer2++;
 					threadMain.updatePlayerCount(countPlayer1, countPlayer2);
 				}
 
 				trigger = true;
 			}
-			
-			switch(new_code) {
-			case "W" : {
-				if(getKenPosY()-170 < 0) break;
-				kenn.relocate((double) getKenPosX(), (double) getKenPosY()-170);
-				setKenPosY(getKenPosY()-170);
+
+			switch (new_code) {
+			case "W": {
+				if (getKenPosY() - 170 < 0)
+					break;
+				kenn.relocate((double) getKenPosX(), (double) getKenPosY() - 170);
+				setKenPosY(getKenPosY() - 170);
 				break;
 			}
-			case "S" : {
-				if(getKenPosY()+170 > 406) break;
-				kenn.relocate((double) getKenPosX(), (double) getKenPosY()+170);
-				setKenPosY(getKenPosY()+170);
+			case "S": {
+				if (getKenPosY() + 170 > 406)
+					break;
+				kenn.relocate((double) getKenPosX(), (double) getKenPosY() + 170);
+				setKenPosY(getKenPosY() + 170);
 				break;
 			}
-			case "UP" : {
-				if(getRyuPosY()-170 < 0) break;
-				ryuu.relocate((double) getRyuPosX(), (double) getRyuPosY()-170);
-				setRyuPosY(getRyuPosY()-170);
+			case "UP": {
+				if (getRyuPosY() - 170 < 0)
+					break;
+				ryuu.relocate((double) getRyuPosX(), (double) getRyuPosY() - 170);
+				setRyuPosY(getRyuPosY() - 170);
 
 				break;
 			}
-			case "DOWN" : {
-				if(getRyuPosY()+170 > 406) break;
-				ryuu.relocate((double) getRyuPosX(), (double) getRyuPosY()+170);
-				setRyuPosY(getRyuPosY()+170);
+			case "DOWN": {
+				if (getRyuPosY() + 170 > 406)
+					break;
+				ryuu.relocate((double) getRyuPosX(), (double) getRyuPosY() + 170);
+				setRyuPosY(getRyuPosY() + 170);
 				break;
 			}
-	}
+			}
 		});
-		mainScene.setOnKeyReleased(new EventHandler<KeyEvent>() { 
-				@Override
-				public void handle(KeyEvent event) {
-					trigger = false;
-				}	
+		mainScene.setOnKeyReleased(new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent event) {
+				trigger = false;
+			}
 		});
 	}
-	
+
 	public void setClickedCountedFont() {
 		try {
-            txtCount1.setFont(Font.loadFont(new FileInputStream(FONT_PATH), 14));
-            txtCount2.setFont(Font.loadFont(new FileInputStream(FONT_PATH), 14));
-        }catch(FileNotFoundException e){
-            txtCount1.setFont(Font.font("Verdana",14));
-            txtCount2.setFont(Font.font("Verdana",14));
-        }
+			txtCount1.setFont(Font.loadFont(new FileInputStream(FONT_PATH), 14));
+			txtCount2.setFont(Font.loadFont(new FileInputStream(FONT_PATH), 14));
+		} catch (FileNotFoundException e) {
+			txtCount1.setFont(Font.font("Verdana", 14));
+			txtCount2.setFont(Font.font("Verdana", 14));
+		}
 		txtCount1.relocate(20, 10);
 		txtCount2.relocate(990, 10);
-		mainPane.getChildren().addAll(txtCount1,txtCount2);
+		mainPane.getChildren().addAll(txtCount1, txtCount2);
 	}
 
 	protected void drawBackground() {
@@ -210,7 +247,8 @@ public class GameSceneController extends Controller {
 		kenn.setFitHeight(0.3 * kenn.prefHeight(1));
 		kenn.setFitWidth(0.3 * kenn.prefWidth(1));
 		kenn.relocate((double) (70), (double) (340));
-		setKenPosX(70);setKenPosY(340);
+		setKenPosX(70);
+		setKenPosY(340);
 		mainPane.getChildren().add(kenn);
 
 		ryuu = new ImageView(RYU);
@@ -219,11 +257,12 @@ public class GameSceneController extends Controller {
 		ryuu.setFitWidth(0.3 * ryuu.prefWidth(1));
 		mainPane.getChildren().remove(ryuu);
 		ryuu.relocate((double) (900), (double) (340));
-		setRyuPosX(900);setRyuPosY(340);
+		setRyuPosX(900);
+		setRyuPosY(340);
 		mainPane.getChildren().add(ryuu);
 
 	}
-	
+
 	protected void initializeNextBallBar() {
 		firePicKen.relocate((double) (-200), (double) (500));
 		firePicKen.setFitHeight(0.1 * firePicKen.prefHeight(1));
@@ -234,8 +273,8 @@ public class GameSceneController extends Controller {
 		WaterPicKen.relocate((double) (-200), (double) (500));
 		WaterPicKen.setFitHeight(0.2 * WaterPicKen.prefHeight(1));
 		WaterPicKen.setFitWidth(0.2 * WaterPicKen.prefWidth(1));
-		mainPane.getChildren().addAll(firePicKen,EarthPicKen,WaterPicKen);
-		
+		mainPane.getChildren().addAll(firePicKen, EarthPicKen, WaterPicKen);
+
 		firePicRyu.relocate((double) (-900), (double) (500));
 		firePicRyu.setFitHeight(0.1 * firePicRyu.prefHeight(1));
 		firePicRyu.setFitWidth(0.1 * firePicRyu.prefWidth(1));
@@ -245,71 +284,76 @@ public class GameSceneController extends Controller {
 		WaterPicRyu.relocate((double) (-900), (double) (500));
 		WaterPicRyu.setFitHeight(0.2 * WaterPicRyu.prefHeight(1));
 		WaterPicRyu.setFitWidth(0.2 * WaterPicRyu.prefWidth(1));
-		mainPane.getChildren().addAll(firePicRyu,EarthPicRyu,WaterPicRyu);
+		mainPane.getChildren().addAll(firePicRyu, EarthPicRyu, WaterPicRyu);
 	}
+
 	protected void appearNextBallKen(int r) {
-		switch(r) {
-		case 0:{
+		switch (r) {
+		case 0: {
 			firePicKen.relocate((double) (50), (double) (500));
 			EarthPicKen.relocate((double) (-200), (double) (500));
 			WaterPicKen.relocate((double) (-200), (double) (500));
 			break;
 		}
-		case 1:{
+		case 1: {
 			EarthPicKen.relocate((double) (50), (double) (500));
 			firePicKen.relocate((double) (-200), (double) (500));
 			WaterPicKen.relocate((double) (-200), (double) (500));
 			break;
 		}
-		case 2:{
+		case 2: {
 			WaterPicKen.relocate((double) (50), (double) (500));
 			EarthPicKen.relocate((double) (-200), (double) (500));
 			firePicKen.relocate((double) (-200), (double) (500));
 			break;
 		}
-			
+
 		}
 	}
+
 	protected void appearNextBallRyu(int r) {
-		switch(r) {
-		case 0:{
+		switch (r) {
+		case 0: {
 			firePicRyu.relocate((double) (900), (double) (500));
 			EarthPicRyu.relocate((double) (-200), (double) (500));
 			WaterPicRyu.relocate((double) (-200), (double) (500));
 			break;
 		}
-		case 1:{
+		case 1: {
 			EarthPicRyu.relocate((double) (900), (double) (500));
 			firePicRyu.relocate((double) (-200), (double) (500));
 			WaterPicRyu.relocate((double) (-200), (double) (500));
 			break;
 		}
-		case 2:{
+		case 2: {
 			WaterPicRyu.relocate((double) (900), (double) (500));
 			EarthPicRyu.relocate((double) (-200), (double) (500));
 			firePicRyu.relocate((double) (-200), (double) (500));
 			break;
 		}
-			
+
 		}
 	}
-	
+
 	public static void drawBall(PowerBall ball) {
 		ImageView im = (ball).getImageView();
 //		System.out.println(im);
 		mainPane.getChildren().remove(im);
-		if(ball.getPlayerSide() < 0)
-			im.relocate((double) (ball.getX()), (double) getRyuPosY());
-		else if(ball.getPlayerSide() > 0);
-			im.relocate((double) (ball.getX()), (double) getKenPosY());
+//		System.out.println(ball.getY());
+//		if(ball.getPlayerSide() < 0)
+//			im.relocate((double) (ball.getX()), (double) ball.getY());
+//		else if(ball.getPlayerSide() > 0);
+		im.relocate((double) (ball.getX()), (double) ball.getY());
 		mainPane.getChildren().add(im);
 
 	}
-	public static void updateCount(int count1,int count2) {
+
+	public static void updateCount(int count1, int count2) {
 		txtCount1.setText(Integer.toString(count1));
 		txtCount2.setText(Integer.toString(count2));
 	}
-	public int randomBall() {		// 0=fireBall,1=earthBall,2=waterBall;
+
+	public int randomBall() { // 0=fireBall,1=earthBall,2=waterBall;
 		Random rand = new Random();
 		int r = rand.nextInt(3);
 		return r;
@@ -362,7 +406,5 @@ public class GameSceneController extends Controller {
 	public static int getCountPlayer2() {
 		return countPlayer2;
 	}
-	
-	
-	
+
 }

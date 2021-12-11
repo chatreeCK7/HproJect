@@ -11,15 +11,16 @@ public class EarthBall extends PowerBall{
 
 	public EarthBall(int x, int highLevel, int playerSide) {
 		super(x, highLevel, playerSide);
-		if(playerSide > 0)
-			createFirstPowerBall(GameSceneController.getCountPlayer1());
-		else 
-			createFirstPowerBall(GameSceneController.getCountPlayer2());
+//		if(playerSide > 0)
+//			createFirstPowerBall(GameSceneController.getCountPlayer1());
+//		else 
+//			createFirstPowerBall(GameSceneController.getCountPlayer2());
 		// TODO Auto-generated constructor stub
 	}
 	@Override
 	public void createFirstPowerBall(int count) {
 		// TODO Auto-generated method stub
+		System.out.println(count);
 		double size = 0.06+0.004*count;
 		imageView = new ImageView(EarthBall);
 		imageView.setFitHeight(size*imageView.prefHeight(1));

@@ -9,13 +9,13 @@ import scene.controller.GameSceneController;
 
 public abstract class PowerBall {
 	
-	int x, y, highLevel, speedX, speedY, playerSide;
+	int x, y, highLevel, speedX, speedY, playerSide,count;
 	boolean isInMap;
 	ImageView imageView;
 
 	public PowerBall(int x,int highLevel,int playerSide) {
 		this.x = x;
-		this.y = 10 + highLevel*80;
+		this.y = highLevel;
 		speedX = playerSide;
 		speedY = 0;
 		isInMap=true;
@@ -26,8 +26,8 @@ public abstract class PowerBall {
 	abstract public ImageView getImageView();
 	
 	public void update() {
-		System.out.println(this.x);
-		if(this.x<1000)
+//		System.out.println(this.x);
+		if(this.x<1100)
 			this.x +=speedX;
 		else {
 //			GameSceneController.removeFromPane(imageView);
@@ -55,4 +55,18 @@ public abstract class PowerBall {
 	public int getPlayerSide() {
 		return playerSide;
 	}
+
+	public void setY(int y) {
+		this.y = y;
+	}
+
+	public int getCount() {
+		return count;
+	}
+
+	public void setCount(int count) {
+		this.count = count;
+	}
+	
+	
 }
