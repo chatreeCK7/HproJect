@@ -4,8 +4,7 @@ import scene.manager.SceneManager;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-
+import java.util.*;
 import application.ThreadMain;
 import entity.*;
 import javafx.application.Application;
@@ -35,6 +34,10 @@ public class GameSceneController extends Controller {
 	private static final int WIDTH = 1024;
 	private static int countPlayer1;
 	private static int countPlayer2;
+	private static PowerBall nextBallKen;
+	private static PowerBall nextBallRyu;
+	private EarthBall eB = new EarthBall(100, 100, 5);
+	private FireBall fb = new FireBall(100,100,5);
 	private ImageView kenn;
 	private ImageView ryuu;
 	private int kenPosX = 70;
@@ -43,13 +46,19 @@ public class GameSceneController extends Controller {
 	private static int ryuPosY ;
 	private ArrayList<ArrayList<PowerBall>> p1Ball;
 	private ArrayList<ArrayList<PowerBall>> p2Ball;
-	
-	
+
 	private static AnchorPane mainPane ;
 	private Scene mainScene;
 	private Stage mainStage;
 	private ThreadMain threadMain;
+	private ImageView firePicRyu = new ImageView(entity.FireBall.getFireballl());
+	private ImageView EarthPicRyu = new ImageView(entity.EarthBall.getEarthball());
+	private ImageView WaterPicRyu = new ImageView(entity.WaterBall.getWaterballl());
 	
+	private ImageView firePicKen = new ImageView(entity.FireBall.getFireballl());
+	private ImageView EarthPicKen = new ImageView(entity.EarthBall.getEarthball());
+	private ImageView WaterPicKen = new ImageView(entity.WaterBall.getWaterballl());
+
 	Canvas canvas = new Canvas();
 	GraphicsContext ctx = canvas.getGraphicsContext2D();
 	private static Text txtCount1,txtCount2;
@@ -66,6 +75,7 @@ public class GameSceneController extends Controller {
 		mainStage = new Stage();
 		drawBackground();
 		initializePlayer();
+		initializeNextBallBar();
 		setClickedCountedFont();
 		mainScene = new Scene(mainPane, WIDTH, HEIGHT);
 		setOnCharged();
@@ -111,20 +121,31 @@ public class GameSceneController extends Controller {
 			if(!trigger) {
 				if (new_code.equals("SPACE")) {
 					EarthBall fB = new EarthBall(100, 100, 5);
+					int r = randomBall();
+					appearNextBallKen(r);
+					PowerBall pB ;
 					threadMain.initalizeNewPlayer(fB);
+					countPlayer1 = 0;
+					threadMain.updatePlayerCount(countPlayer1, countPlayer2);
+				
 				}
-				else if(new_code.equals("ENTER")) {
-					EarthBall fB = new EarthBall(950, 100, -5);
+				if(new_code.equals("ENTER")) {
+					WaterBall fB = new WaterBall(950, 100, -5);
+					int r = randomBall();
+					appearNextBallRyu(r);
 					threadMain.initalizeNewPlayer(fB);
+					countPlayer2 = 0;
+					threadMain.updatePlayerCount(countPlayer1, countPlayer2);
 				}
-				else if(new_code.equals("A")||new_code.equals("D")) {
+				if(new_code.equals("A")||new_code.equals("D")) {
 					countPlayer1++;	
 					threadMain.updatePlayerCount(countPlayer1, countPlayer2);
 				}
-				else if(new_code.equals("RIGHT")||new_code.equals("LEFT")) {
+				if(new_code.equals("RIGHT")||new_code.equals("LEFT")) {
 					countPlayer2++;
 					threadMain.updatePlayerCount(countPlayer1, countPlayer2);
 				}
+
 				trigger = true;
 			}
 			
@@ -202,6 +223,76 @@ public class GameSceneController extends Controller {
 
 	}
 	
+	protected void initializeNextBallBar() {
+		firePicKen.relocate((double) (-200), (double) (500));
+		firePicKen.setFitHeight(0.1 * firePicKen.prefHeight(1));
+		firePicKen.setFitWidth(0.1 * firePicKen.prefWidth(1));
+		EarthPicKen.relocate((double) (-200), (double) (500));
+		EarthPicKen.setFitHeight(0.1 * EarthPicKen.prefHeight(1));
+		EarthPicKen.setFitWidth(0.1 * EarthPicKen.prefWidth(1));
+		WaterPicKen.relocate((double) (-200), (double) (500));
+		WaterPicKen.setFitHeight(0.2 * WaterPicKen.prefHeight(1));
+		WaterPicKen.setFitWidth(0.2 * WaterPicKen.prefWidth(1));
+		mainPane.getChildren().addAll(firePicKen,EarthPicKen,WaterPicKen);
+		
+		firePicRyu.relocate((double) (-900), (double) (500));
+		firePicRyu.setFitHeight(0.1 * firePicRyu.prefHeight(1));
+		firePicRyu.setFitWidth(0.1 * firePicRyu.prefWidth(1));
+		EarthPicRyu.relocate((double) (-900), (double) (500));
+		EarthPicRyu.setFitHeight(0.1 * EarthPicRyu.prefHeight(1));
+		EarthPicRyu.setFitWidth(0.1 * EarthPicRyu.prefWidth(1));
+		WaterPicRyu.relocate((double) (-900), (double) (500));
+		WaterPicRyu.setFitHeight(0.2 * WaterPicRyu.prefHeight(1));
+		WaterPicRyu.setFitWidth(0.2 * WaterPicRyu.prefWidth(1));
+		mainPane.getChildren().addAll(firePicRyu,EarthPicRyu,WaterPicRyu);
+	}
+	protected void appearNextBallKen(int r) {
+		switch(r) {
+		case 0:{
+			firePicKen.relocate((double) (50), (double) (500));
+			EarthPicKen.relocate((double) (-200), (double) (500));
+			WaterPicKen.relocate((double) (-200), (double) (500));
+			break;
+		}
+		case 1:{
+			EarthPicKen.relocate((double) (50), (double) (500));
+			firePicKen.relocate((double) (-200), (double) (500));
+			WaterPicKen.relocate((double) (-200), (double) (500));
+			break;
+		}
+		case 2:{
+			WaterPicKen.relocate((double) (50), (double) (500));
+			EarthPicKen.relocate((double) (-200), (double) (500));
+			firePicKen.relocate((double) (-200), (double) (500));
+			break;
+		}
+			
+		}
+	}
+	protected void appearNextBallRyu(int r) {
+		switch(r) {
+		case 0:{
+			firePicRyu.relocate((double) (900), (double) (500));
+			EarthPicRyu.relocate((double) (-200), (double) (500));
+			WaterPicRyu.relocate((double) (-200), (double) (500));
+			break;
+		}
+		case 1:{
+			EarthPicRyu.relocate((double) (900), (double) (500));
+			firePicRyu.relocate((double) (-200), (double) (500));
+			WaterPicRyu.relocate((double) (-200), (double) (500));
+			break;
+		}
+		case 2:{
+			WaterPicRyu.relocate((double) (900), (double) (500));
+			EarthPicRyu.relocate((double) (-200), (double) (500));
+			firePicRyu.relocate((double) (-200), (double) (500));
+			break;
+		}
+			
+		}
+	}
+	
 	public static void drawBall(PowerBall ball) {
 		ImageView im = (ball).getImageView();
 //		System.out.println(im);
@@ -213,28 +304,24 @@ public class GameSceneController extends Controller {
 		mainPane.getChildren().add(im);
 
 	}
-	public static void drawCount(int count1,int count2) {
+	public static void updateCount(int count1,int count2) {
 		txtCount1.setText(Integer.toString(count1));
 		txtCount2.setText(Integer.toString(count2));
+	}
+	public int randomBall() {		// 0=fireBall,1=earthBall,2=waterBall;
+		Random rand = new Random();
+		int r = rand.nextInt(3);
+		return r;
+	}
 
+	public static Image getBackground() {
+		return BACKGROUND;
+	}
+
+	public static Image getKen() {
+		return KEN;
 	}
 	
-	public static int getCountPlayer1() {
-		return countPlayer1;
-	}
-
-	public static void setCountPlayer1(int countPlayer1) {
-		GameSceneController.countPlayer1 = countPlayer1;
-	}
-
-	public static int getCountPlayer2() {
-		return countPlayer2;
-	}
-
-	public static void setCountPlayer2(int countPlayer2) {
-		GameSceneController.countPlayer2 = countPlayer2;
-	}
-
 	public int getKenPosX() {
 		return kenPosX;
 	}
@@ -266,6 +353,15 @@ public class GameSceneController extends Controller {
 	public void setRyuPosY(int ryuPosY) {
 		this.ryuPosY = ryuPosY;
 	}
+
+	public static int getCountPlayer1() {
+		return countPlayer1;
+	}
+
+	public static int getCountPlayer2() {
+		return countPlayer2;
+	}
+	
 	
 	
 }
