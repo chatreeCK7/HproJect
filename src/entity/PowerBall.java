@@ -10,15 +10,18 @@ import scene.controller.GameSceneController;
 public abstract class PowerBall {
 
 	int x, y, highLevel, speedX, speedY, playerSide, count;
-	boolean isInMap;
+	boolean isInMap, isAttack;
 	ImageView imageView;
 
 	public PowerBall(int x, int highLevel, int playerSide) {
 		this.x = x;
 		this.y = highLevel;
 		speedX = playerSide;
+		this.playerSide = playerSide;
 		speedY = 0;
 		isInMap = true;
+		setAttack(false);
+		this.playerSide = playerSide;
 		// TODO Auto-generated constructor stub
 	}
 
@@ -26,10 +29,14 @@ public abstract class PowerBall {
 
 	abstract public ImageView getImageView();
 
+	public void setImageView(ImageView iV) {
+		imageView = iV;
+	}
+
 	public void update() {
 //		System.out.println(this.x);
-		if (this.x < 1100)
-			this.x += speedX;
+		if(this.x>-400 && this.x<1100)
+			this.x +=speedX;
 		else {
 //			GameSceneController.removeFromPane(imageView);
 			isInMap = false;
@@ -74,6 +81,22 @@ public abstract class PowerBall {
 
 	public void setCount(int count) {
 		this.count = count;
+	}
+
+	public boolean isAttack() {
+		return isAttack;
+	}
+
+	public void setAttack(boolean isAttack) {
+		this.isAttack = isAttack;
+	}
+
+	public void setInMap(boolean isInMap) {
+		this.isInMap = isInMap;
+	}
+
+	public void setX(int x) {
+		this.x = x;
 	}
 
 }
