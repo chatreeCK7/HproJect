@@ -44,6 +44,7 @@ public class GameSceneController extends Controller {
 	private ArrayList<ArrayList<PowerBall>> p1Ball;
 	private ArrayList<ArrayList<PowerBall>> p2Ball;
 	
+	
 	private static AnchorPane mainPane ;
 	private Scene mainScene;
 	private Stage mainStage;
@@ -104,7 +105,6 @@ public class GameSceneController extends Controller {
 
 	
 	public void setOnCharged() {
-		ThreadMain player1Thread = new ThreadMain();
 		mainScene.setOnKeyPressed((KeyEvent e) -> {
 			String new_code = e.getCode().toString();
 			System.out.println(new_code);
@@ -217,6 +217,22 @@ public class GameSceneController extends Controller {
 		txtCount1.setText(Integer.toString(count1));
 		txtCount2.setText(Integer.toString(count2));
 
+	}
+	
+	public static int getCountPlayer1() {
+		return countPlayer1;
+	}
+
+	public static void setCountPlayer1(int countPlayer1) {
+		GameSceneController.countPlayer1 = countPlayer1;
+	}
+
+	public static int getCountPlayer2() {
+		return countPlayer2;
+	}
+
+	public static void setCountPlayer2(int countPlayer2) {
+		GameSceneController.countPlayer2 = countPlayer2;
 	}
 
 	public int getKenPosX() {
