@@ -9,13 +9,14 @@ import scene.controller.GameSceneController;
 
 public abstract class PowerBall {
 	
-	int x, y, highLevel, speedX, speedY, playerSide;
+	int x, y, highLevel, speedX, speedY, playerSide, power;
 	boolean isInMap;
 	ImageView imageView;
 
-	public PowerBall(int x,int highLevel,int playerSide) {
+	public PowerBall(int x,int highLevel,int playerSide,int power) {
 		this.x = x;
 		this.y = 10 + highLevel*80;
+		setPower(power);
 		speedX = playerSide;
 		speedY = 0;
 		isInMap=true;
@@ -55,4 +56,14 @@ public abstract class PowerBall {
 	public int getPlayerSide() {
 		return playerSide;
 	}
+
+	public int getPower() {
+		return power;
+	}
+
+	public void setPower(int power) {
+		this.power = power;
+	}
+	
+	
 }

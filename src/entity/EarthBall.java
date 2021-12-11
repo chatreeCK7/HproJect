@@ -9,8 +9,8 @@ import javafx.util.Duration;
 public class EarthBall extends PowerBall{
 	private static final Image EarthBall = new Image("/entity/res/earthBall.gif");
 
-	public EarthBall(int x, int highLevel, int playerSide) {
-		super(x, highLevel, playerSide);
+	public EarthBall(int x, int highLevel, int playerSide, int power) {
+		super(x, highLevel, playerSide, power);
 		if(playerSide > 0)
 			createFirstPowerBall(GameSceneController.getCountPlayer1());
 		else 

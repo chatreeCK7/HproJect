@@ -9,8 +9,8 @@ import javafx.util.Duration;
 
 public class FireBall extends PowerBall{
 	private static final Image fireBalll = new Image("/entity/res/fireBall.png");
-	public FireBall(int x, int highLevel, int playerSide) {
-		super(x, highLevel, playerSide);
+	public FireBall(int x, int highLevel, int playerSide, int power) {
+		super(x, highLevel, playerSide, power);
 		if(playerSide > 0)
 			createFirstPowerBall(GameSceneController.getCountPlayer1());
 		else 
