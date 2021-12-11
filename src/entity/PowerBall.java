@@ -22,7 +22,7 @@ public abstract class PowerBall {
 		// TODO Auto-generated constructor stub
 	}
 	
-	abstract public void createFirstPowerBall();
+	abstract public void createFirstPowerBall(int count);
 	abstract public ImageView getImageView();
 	
 	public void update() {

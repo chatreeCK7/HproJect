@@ -12,11 +12,11 @@ public class ThreadMain {
 	}
 	
 	protected void updatePlayerMovement(PowerBall ball) {
-		try {		
+		try {
 			while(ball.isInMap()) {
 				Thread.sleep(50);
 				Platform.runLater(()->{
-					((PowerBall)ball).update();	
+					((PowerBall)ball).update();
 					GameSceneController.drawBall(ball);
 				});
 			}
@@ -29,7 +29,7 @@ public class ThreadMain {
 	public void updatePlayerCount(int count1,int count2) {
 		new Thread(()->{
 			Platform.runLater(()->{
-				GameSceneController.drawCount(count1,count2);
+				GameSceneController.updateCount(count1,count2);
 			});
 		}).start();
 	}
