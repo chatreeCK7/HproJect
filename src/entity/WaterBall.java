@@ -11,6 +11,7 @@ public class WaterBall extends PowerBall{
 	private static final Image waterBalll = new Image("/entity/res/waterBall.gif");
 	public WaterBall(int x, int highLevel, int playerSide) {
 		super(x, highLevel, playerSide);
+		imageView = new ImageView(waterBalll);
 //		if(playerSide > 0)
 //			createFirstPowerBall(super.getCount());
 //		else 
@@ -22,8 +23,7 @@ public class WaterBall extends PowerBall{
 	public void createFirstPowerBall(int count) {
 		// TODO Auto-generated method stub
 		System.out.println(count);
-		double size = 0.18+0.004*count;
-		imageView = new ImageView(waterBalll);
+		double size = 0.13+0.006*count;
 		imageView.setFitHeight(size*imageView.prefHeight(1));
 		imageView.setFitWidth(size*imageView.prefWidth(1));
 	}

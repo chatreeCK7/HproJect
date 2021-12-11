@@ -116,9 +116,9 @@ public class GameSceneController extends Controller {
 		ThreadMain player1Thread = new ThreadMain();
 		mainScene.setOnKeyPressed((KeyEvent e) -> {
 			String new_code = e.getCode().toString();
-			System.out.println(new_code);
-			if (!trigger) {
-				if (new_code.equals("SPACE")) {
+//			System.out.println(new_code);
+//			if (!trigger) {
+				if (new_code.equals("SPACE") && getCountPlayer1()!=0) {
 					FireBall fB = new FireBall(100, getKenPosY(), 5);
 					EarthBall eB = new EarthBall(100, getKenPosY(), 5);
 					WaterBall wB = new WaterBall(100, getKenPosY(), 5);
@@ -126,12 +126,12 @@ public class GameSceneController extends Controller {
 						FireBall temp = new FireBall(100, getKenPosY(), 5);
 						temp.setCount(getCountPlayer1());
 						temp.createFirstPowerBall(getCountPlayer1());
-						threadMain.initalizeNewPlayer(temp);
+						threadMain.initalizeNewPlayer1(temp);
 					} else {
 						nextBallKen.setCount(getCountPlayer1());
 						nextBallKen.setY(getKenPosY());
 						nextBallKen.createFirstPowerBall(getCountPlayer1());
-						threadMain.initalizeNewPlayer(nextBallKen);
+						threadMain.initalizeNewPlayer1(nextBallKen);
 					}
 					int r = randomBall();
 					appearNextBallKen(r);
@@ -145,20 +145,20 @@ public class GameSceneController extends Controller {
 					threadMain.updatePlayerCount(countPlayer1, countPlayer2);
 
 				}
-				if (new_code.equals("ENTER")) {
+				if (new_code.equals("ENTER") && getCountPlayer2()!=0) {
 					FireBall fB = new FireBall(900, getRyuPosY(), -5);
 					EarthBall eB = new EarthBall(900, getRyuPosY(), -5);
 					WaterBall wB = new WaterBall(900, getRyuPosY(), -5);
 					if (nextBallRyu==null) {
-						FireBall temp2 = new FireBall(900, getKenPosY(), -5);
+						FireBall temp2 = new FireBall(900, getRyuPosY(), -5);
 						temp2.setCount(getCountPlayer2());
 						temp2.createFirstPowerBall(getCountPlayer2());
-						threadMain.initalizeNewPlayer(temp2);
+						threadMain.initalizeNewPlayer2(temp2);
 					} else {
 						nextBallRyu.setY(getRyuPosY());
 						nextBallRyu.setCount(getCountPlayer2());
 						nextBallRyu.createFirstPowerBall(getCountPlayer2());
-						threadMain.initalizeNewPlayer(nextBallRyu);
+						threadMain.initalizeNewPlayer2(nextBallRyu);
 					}
 					int r = randomBall();
 					appearNextBallRyu(r);
@@ -179,9 +179,8 @@ public class GameSceneController extends Controller {
 					countPlayer2++;
 					threadMain.updatePlayerCount(countPlayer1, countPlayer2);
 				}
-
-				trigger = true;
-			}
+//				trigger = true;
+//			}
 
 			switch (new_code) {
 			case "W": {
@@ -345,7 +344,6 @@ public class GameSceneController extends Controller {
 //		else if(ball.getPlayerSide() > 0);
 		im.relocate((double) (ball.getX()), (double) ball.getY());
 		mainPane.getChildren().add(im);
-
 	}
 
 	public static void updateCount(int count1, int count2) {

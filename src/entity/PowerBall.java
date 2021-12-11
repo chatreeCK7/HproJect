@@ -17,6 +17,7 @@ public abstract class PowerBall {
 		this.x = x;
 		this.y = highLevel;
 		speedX = playerSide;
+		this.playerSide = playerSide;
 		speedY = 0;
 		isInMap=true;
 		// TODO Auto-generated constructor stub
@@ -24,10 +25,12 @@ public abstract class PowerBall {
 	
 	abstract public void createFirstPowerBall(int count);
 	abstract public ImageView getImageView();
-	
+	public void setImageView(ImageView iV) {
+		imageView = iV;
+	}
 	public void update() {
 //		System.out.println(this.x);
-		if(this.x<1100)
+		if(this.x>-400 && this.x<1100)
 			this.x +=speedX;
 		else {
 //			GameSceneController.removeFromPane(imageView);
@@ -66,6 +69,14 @@ public abstract class PowerBall {
 
 	public void setCount(int count) {
 		this.count = count;
+	}
+
+	public void setInMap(boolean isInMap) {
+		this.isInMap = isInMap;
+	}
+
+	public void setX(int x) {
+		this.x = x;
 	}
 	
 	
