@@ -4,6 +4,7 @@ import scene.manager.SceneManager;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 import application.ThreadMain;
 import entity.*;
@@ -37,9 +38,11 @@ public class GameSceneController extends Controller {
 	private ImageView kenn;
 	private ImageView ryuu;
 	private int kenPosX = 70;
-	private int kenPosY ;
+	private static int kenPosY ;
 	private int ryuPosX = 900 ;
-	private int ryuPosY ;
+	private static int ryuPosY ;
+	private ArrayList<ArrayList<PowerBall>> p1Ball;
+	private ArrayList<ArrayList<PowerBall>> p2Ball;
 	
 	private static AnchorPane mainPane ;
 	private Scene mainScene;
@@ -203,8 +206,10 @@ public class GameSceneController extends Controller {
 		ImageView im = (ball).getImageView();
 //		System.out.println(im);
 		mainPane.getChildren().remove(im);
-		mainPane.getChildren().remove(im);
-		im.relocate((double) (ball.getX()), (double) (380));
+		if(ball.getPlayerSide() < 0)
+			im.relocate((double) (ball.getX()), (double) getRyuPosY());
+		else if(ball.getPlayerSide() > 0);
+			im.relocate((double) (ball.getX()), (double) getKenPosY());
 		mainPane.getChildren().add(im);
 
 	}
@@ -222,7 +227,7 @@ public class GameSceneController extends Controller {
 		this.kenPosX = kenPosX;
 	}
 
-	public int getKenPosY() {
+	public static int getKenPosY() {
 		return kenPosY;
 	}
 
@@ -238,7 +243,7 @@ public class GameSceneController extends Controller {
 		this.ryuPosX = ryuPosX;
 	}
 
-	public int getRyuPosY() {
+	public static int getRyuPosY() {
 		return ryuPosY;
 	}
 
