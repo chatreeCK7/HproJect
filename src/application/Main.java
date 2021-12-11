@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import scene.controller.GameSceneController;
+
 import scene.controller.StartSceneController;
 
 public class Main extends Application {
