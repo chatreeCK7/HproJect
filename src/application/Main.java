@@ -17,6 +17,7 @@ public class Main extends Application {
 			primaryStage = start.getMainStage();
 			primaryStage.show();
 			
+			
 		}catch (Exception e){
 			e.printStackTrace();
 		}
