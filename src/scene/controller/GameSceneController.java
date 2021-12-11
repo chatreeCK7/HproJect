@@ -25,20 +25,26 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class GameSceneController extends Controller {
-	private static final Image background = new Image("/scene/controller/res/Background1.png");
-	private static final Image ken = new Image("/scene/controller/res/ken_player.gif");
-	private static final Image ryu = new Image("/scene/controller/res/ryu_player.gif");
-	private final String FONT_PATH = "/scene/controller/res/PressStart2P-vaV7.ttf";
+	private static final Image BACKGROUND = new Image("/scene/controller/res/Background1.png");
+	private static final Image KEN = new Image("/scene/controller/res/ken_player.gif");
+	private static final Image RYU = new Image("/scene/controller/res/ryu_player.gif");
+	private static final Image EMPTY = new Image("/scene/controller/res/Empty Sprite.png");
+	private static final String FONT_PATH = "/scene/controller/res/PressStart2P-vaV7.ttf";
 	private static final int HEIGHT = 576;
 	private static final int WIDTH = 1024;
 	private static int countPlayer1;
 	private static int countPlayer2;
+	private ImageView kenn;
+	private ImageView ryuu;
+	private int kenPosX = 70;
+	private int kenPosY ;
+	private int ryuPosX = 900 ;
+	private int ryuPosY ;
 	
 	private static AnchorPane mainPane ;
 	private Scene mainScene;
 	private Stage mainStage;
 	private ThreadMain threadMain;
-	private VBox mainRoot;
 	
 	Canvas canvas = new Canvas();
 	GraphicsContext ctx = canvas.getGraphicsContext2D();
@@ -52,14 +58,12 @@ public class GameSceneController extends Controller {
 		countPlayer2 = 0;
 		txtCount1 = new Text("0");
 		txtCount2 = new Text("0");
-		mainRoot = new VBox();
 		mainPane = new AnchorPane();
 		mainStage = new Stage();
 		drawBackground();
 		initializePlayer();
 		setClickedCountedFont();
-		mainRoot.getChildren().add(mainPane);
-		mainScene = new Scene(mainRoot, WIDTH, HEIGHT);
+		mainScene = new Scene(mainPane, WIDTH, HEIGHT);
 		setOnCharged();
 		mainStage.setScene(mainScene);
 		mainStage.setTitle("Hadoz");
@@ -95,12 +99,13 @@ public class GameSceneController extends Controller {
 		this.mainScene = mainScene;
 	}
 
+	
 	public void setOnCharged() {
+		ThreadMain player1Thread = new ThreadMain();
 		mainScene.setOnKeyPressed((KeyEvent e) -> {
 			String new_code = e.getCode().toString();
 			System.out.println(new_code);
 			if(!trigger) {
-				trigger = true;
 				if (new_code.equals("SPACE")) {
 					EarthBall fB = new EarthBall(100, 100, 5);
 					threadMain.initalizeNewPlayer(fB);
@@ -117,7 +122,36 @@ public class GameSceneController extends Controller {
 					countPlayer2++;
 					threadMain.updatePlayerCount(countPlayer1, countPlayer2);
 				}
+				trigger = true;
 			}
+			
+			switch(new_code) {
+			case "W" : {
+				if(getKenPosY()-170 < 0) break;
+				kenn.relocate((double) getKenPosX(), (double) getKenPosY()-170);
+				setKenPosY(getKenPosY()-170);
+				break;
+			}
+			case "S" : {
+				if(getKenPosY()+170 > 406) break;
+				kenn.relocate((double) getKenPosX(), (double) getKenPosY()+170);
+				setKenPosY(getKenPosY()+170);
+				break;
+			}
+			case "UP" : {
+				if(getRyuPosY()-170 < 0) break;
+				ryuu.relocate((double) getRyuPosX(), (double) getRyuPosY()-170);
+				setRyuPosY(getRyuPosY()-170);
+
+				break;
+			}
+			case "DOWN" : {
+				if(getRyuPosY()+170 > 406) break;
+				ryuu.relocate((double) getRyuPosX(), (double) getRyuPosY()+170);
+				setRyuPosY(getRyuPosY()+170);
+				break;
+			}
+	}
 		});
 		mainScene.setOnKeyReleased(new EventHandler<KeyEvent>() { 
 				@Override
@@ -141,28 +175,30 @@ public class GameSceneController extends Controller {
 	}
 
 	protected void drawBackground() {
-		ImageView backgroundImgView = new ImageView(background);
+		ImageView backgroundImgView = new ImageView(BACKGROUND);
 		mainPane.getChildren().add(backgroundImgView);
 	}
 
 	protected void initializePlayer() {
-		ImageView kenn = new ImageView(ken);
+		kenn = new ImageView(KEN);
 //        removeFromPane(kenn);
 		kenn.setFitHeight(0.3 * kenn.prefHeight(1));
 		kenn.setFitWidth(0.3 * kenn.prefWidth(1));
 		kenn.relocate((double) (70), (double) (340));
+		setKenPosX(70);setKenPosY(340);
 		mainPane.getChildren().add(kenn);
 
-		ImageView ryuu = new ImageView(ryu);
+		ryuu = new ImageView(RYU);
 		ryuu.setScaleX(-1);
 		ryuu.setFitHeight(0.3 * ryuu.prefHeight(1));
 		ryuu.setFitWidth(0.3 * ryuu.prefWidth(1));
 		mainPane.getChildren().remove(ryuu);
 		ryuu.relocate((double) (900), (double) (340));
+		setRyuPosX(900);setRyuPosY(340);
 		mainPane.getChildren().add(ryuu);
 
 	}
-
+	
 	public static void drawBall(PowerBall ball) {
 		ImageView im = (ball).getImageView();
 //		System.out.println(im);
@@ -178,4 +214,37 @@ public class GameSceneController extends Controller {
 
 	}
 
+	public int getKenPosX() {
+		return kenPosX;
+	}
+
+	public void setKenPosX(int kenPosX) {
+		this.kenPosX = kenPosX;
+	}
+
+	public int getKenPosY() {
+		return kenPosY;
+	}
+
+	public void setKenPosY(int kenPosY) {
+		this.kenPosY = kenPosY;
+	}
+
+	public int getRyuPosX() {
+		return ryuPosX;
+	}
+
+	public void setRyuPosX(int ryuPosX) {
+		this.ryuPosX = ryuPosX;
+	}
+
+	public int getRyuPosY() {
+		return ryuPosY;
+	}
+
+	public void setRyuPosY(int ryuPosY) {
+		this.ryuPosY = ryuPosY;
+	}
+	
+	
 }
