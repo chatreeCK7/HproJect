@@ -35,7 +35,7 @@ public class GameSceneController extends Controller {
 	private static int countPlayer1;
 	private static int countPlayer2;
 	private static PowerBall nextBallKen;
-	private static PowerBall nextBallRyu; 
+	private static PowerBall nextBallRyu;
 	private EarthBall eB = new EarthBall(100, 100, 5);
 	private FireBall fb = new FireBall(100,100,5);
 	private static AnchorPane mainPane ;
@@ -43,6 +43,13 @@ public class GameSceneController extends Controller {
 	private Stage mainStage;
 	private ThreadMain threadMain;
 	private VBox mainRoot;
+	private ImageView firePicRyu = new ImageView(entity.FireBall.getFireballl());
+	private ImageView EarthPicRyu = new ImageView(entity.EarthBall.getEarthball());
+	private ImageView WaterPicRyu = new ImageView(entity.WaterBall.getWaterballl());
+	
+	private ImageView firePicKen = new ImageView(entity.FireBall.getFireballl());
+	private ImageView EarthPicKen = new ImageView(entity.EarthBall.getEarthball());
+	private ImageView WaterPicKen = new ImageView(entity.WaterBall.getWaterballl());
 	
 	Canvas canvas = new Canvas();
 	GraphicsContext ctx = canvas.getGraphicsContext2D();
@@ -109,6 +116,9 @@ public class GameSceneController extends Controller {
 				trigger = true;
 				if (new_code.equals("SPACE")) {
 					EarthBall fB = new EarthBall(100, 100, 5);
+					int r = randomBall();
+					appearNextBallKen(r);
+					PowerBall pB ;
 					threadMain.initalizeNewPlayer(fB);
 					countPlayer1 = 0;
 					threadMain.updatePlayerCount(countPlayer1, countPlayer2);
@@ -116,6 +126,8 @@ public class GameSceneController extends Controller {
 				}
 				if(new_code.equals("ENTER")) {
 					WaterBall fB = new WaterBall(950, 100, -5);
+					int r = randomBall();
+					appearNextBallRyu(r);
 					threadMain.initalizeNewPlayer(fB);
 					countPlayer2 = 0;
 					threadMain.updatePlayerCount(countPlayer1, countPlayer2);
@@ -175,37 +187,73 @@ public class GameSceneController extends Controller {
 	}
 	
 	protected void initializeNextBallBar() {
-		ImageView firePicRyu = new ImageView(entity.FireBall.getFireballl());
-		ImageView EarthPicRyu = new ImageView(entity.EarthBall.getEarthball());
-		ImageView WaterPicRyu = new ImageView(entity.WaterBall.getWaterballl());
-		
-
-		ImageView firePicKen = new ImageView(entity.FireBall.getFireballl());
-		ImageView EarthPicKen = new ImageView(entity.EarthBall.getEarthball());
-		ImageView WaterPicKen = new ImageView(entity.WaterBall.getWaterballl());
-		
-		firePicKen.relocate((double) (50), (double) (500));
+		firePicKen.relocate((double) (-200), (double) (500));
 		firePicKen.setFitHeight(0.1 * firePicKen.prefHeight(1));
 		firePicKen.setFitWidth(0.1 * firePicKen.prefWidth(1));
-		EarthPicKen.relocate((double) (50), (double) (500));
+		EarthPicKen.relocate((double) (-200), (double) (500));
 		EarthPicKen.setFitHeight(0.1 * EarthPicKen.prefHeight(1));
 		EarthPicKen.setFitWidth(0.1 * EarthPicKen.prefWidth(1));
-		WaterPicKen.relocate((double) (50), (double) (500));
+		WaterPicKen.relocate((double) (-200), (double) (500));
 		WaterPicKen.setFitHeight(0.2 * WaterPicKen.prefHeight(1));
 		WaterPicKen.setFitWidth(0.2 * WaterPicKen.prefWidth(1));
 		mainPane.getChildren().addAll(firePicKen,EarthPicKen,WaterPicKen);
 		
-		firePicRyu.relocate((double) (900), (double) (500));
+		firePicRyu.relocate((double) (-900), (double) (500));
 		firePicRyu.setFitHeight(0.1 * firePicRyu.prefHeight(1));
 		firePicRyu.setFitWidth(0.1 * firePicRyu.prefWidth(1));
-		EarthPicRyu.relocate((double) (900), (double) (500));
+		EarthPicRyu.relocate((double) (-900), (double) (500));
 		EarthPicRyu.setFitHeight(0.1 * EarthPicRyu.prefHeight(1));
 		EarthPicRyu.setFitWidth(0.1 * EarthPicRyu.prefWidth(1));
-		WaterPicRyu.relocate((double) (900), (double) (500));
+		WaterPicRyu.relocate((double) (-900), (double) (500));
 		WaterPicRyu.setFitHeight(0.2 * WaterPicRyu.prefHeight(1));
 		WaterPicRyu.setFitWidth(0.2 * WaterPicRyu.prefWidth(1));
 		mainPane.getChildren().addAll(firePicRyu,EarthPicRyu,WaterPicRyu);
-		
+	}
+	protected void appearNextBallKen(int r) {
+		switch(r) {
+		case 0:{
+			firePicKen.relocate((double) (50), (double) (500));
+			EarthPicKen.relocate((double) (-200), (double) (500));
+			WaterPicKen.relocate((double) (-200), (double) (500));
+			break;
+		}
+		case 1:{
+			EarthPicKen.relocate((double) (50), (double) (500));
+			firePicKen.relocate((double) (-200), (double) (500));
+			WaterPicKen.relocate((double) (-200), (double) (500));
+			break;
+		}
+		case 2:{
+			WaterPicKen.relocate((double) (50), (double) (500));
+			EarthPicKen.relocate((double) (-200), (double) (500));
+			firePicKen.relocate((double) (-200), (double) (500));
+			break;
+		}
+			
+		}
+	}
+	protected void appearNextBallRyu(int r) {
+		switch(r) {
+		case 0:{
+			firePicRyu.relocate((double) (900), (double) (500));
+			EarthPicRyu.relocate((double) (-200), (double) (500));
+			WaterPicRyu.relocate((double) (-200), (double) (500));
+			break;
+		}
+		case 1:{
+			EarthPicRyu.relocate((double) (900), (double) (500));
+			firePicRyu.relocate((double) (-200), (double) (500));
+			WaterPicRyu.relocate((double) (-200), (double) (500));
+			break;
+		}
+		case 2:{
+			WaterPicRyu.relocate((double) (900), (double) (500));
+			EarthPicRyu.relocate((double) (-200), (double) (500));
+			firePicRyu.relocate((double) (-200), (double) (500));
+			break;
+		}
+			
+		}
 	}
 	
 	public static void drawBall(PowerBall ball) {
@@ -222,7 +270,7 @@ public class GameSceneController extends Controller {
 		txtCount1.setText(Integer.toString(count1));
 		txtCount2.setText(Integer.toString(count2));
 	}
-	public int randomBall() {
+	public int randomBall() {		// 0=fireBall,1=earthBall,2=waterBall;
 		Random rand = new Random();
 		int r = rand.nextInt(3);
 		return r;
