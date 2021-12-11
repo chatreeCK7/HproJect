@@ -6,6 +6,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.*;
 import application.ThreadMain;
+import component.CountLabel;
+import component.HpBar;
 import entity.*;
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -36,22 +38,28 @@ public class GameSceneController extends Controller {
 	private static int countPlayer2;
 	private static PowerBall nextBallKen;
 	private static PowerBall nextBallRyu;
-//	private EarthBall eB = new EarthBall(100, 100, 5);
-//	private FireBall fB = new FireBall(100,100,5);
-//	private WaterBall wB = new WaterBall(100,100,5);
+
 	private ImageView kenn;
 	private ImageView ryuu;
 	private int kenPosX = 70;
 	private static int kenPosY;
 	private int ryuPosX = 900;
 	private static int ryuPosY;
+	private static int kenHp = 100,ryuHp = 100;
+	private static HpBar kenHpBar;
+	private static HpBar ryuHpBar;
+	private static boolean isKenDie = false;
+	private static boolean isRyuDie = false;
+
 	private ArrayList<ArrayList<PowerBall>> p1Ball;
 	private ArrayList<ArrayList<PowerBall>> p2Ball;
 
 	private static AnchorPane mainPane;
 	private Scene mainScene;
-	private Stage mainStage;
+	private static Stage mainStage;
 	private ThreadMain threadMain;
+	private static RyuEndingSceneController ryuEndingScene;
+	private static KenEndingSceneController kenEndingScene;
 	private ImageView firePicRyu = new ImageView(entity.FireBall.getFireballl());
 	private ImageView EarthPicRyu = new ImageView(entity.EarthBall.getEarthball());
 	private ImageView WaterPicRyu = new ImageView(entity.WaterBall.getWaterballl());
@@ -62,22 +70,27 @@ public class GameSceneController extends Controller {
 
 	Canvas canvas = new Canvas();
 	GraphicsContext ctx = canvas.getGraphicsContext2D();
-	private static Text txtCount1, txtCount2;
+	private static CountLabel txtCount1, txtCount2;
 	boolean trigger = false;
 
 	public GameSceneController() {
 		// TODO Auto-generated constructor stub
+		ryuEndingScene = new RyuEndingSceneController();
+		kenEndingScene = new KenEndingSceneController();
 		threadMain = new ThreadMain();
 		countPlayer1 = 0;
 		countPlayer2 = 0;
-		txtCount1 = new Text("0");
-		txtCount2 = new Text("0");
+
+		txtCount1 = new CountLabel("0");
+		txtCount2 = new CountLabel("0");
 		mainPane = new AnchorPane();
 		mainStage = new Stage();
 		drawBackground();
 		initializePlayer();
 		initializeNextBallBar();
 		setClickedCountedFont();
+		createKenHpBar(getKenHp());
+		createRynHpBar(getRyuHp());
 		mainScene = new Scene(mainPane, WIDTH, HEIGHT);
 		setOnCharged();
 		mainStage.setScene(mainScene);
@@ -113,7 +126,6 @@ public class GameSceneController extends Controller {
 	}
 
 	public void setOnCharged() {
-		ThreadMain player1Thread = new ThreadMain();
 		mainScene.setOnKeyPressed((KeyEvent e) -> {
 			String new_code = e.getCode().toString();
 //			System.out.println(new_code);
@@ -122,7 +134,7 @@ public class GameSceneController extends Controller {
 					FireBall fB = new FireBall(100, getKenPosY(), 5);
 					EarthBall eB = new EarthBall(100, getKenPosY(), 5);
 					WaterBall wB = new WaterBall(100, getKenPosY(), 5);
-					if (nextBallKen==null) {
+					if (nextBallKen == null) {
 						FireBall temp = new FireBall(100, getKenPosY(), 5);
 						temp.setCount(getCountPlayer1());
 						temp.createFirstPowerBall(getCountPlayer1());
@@ -143,13 +155,12 @@ public class GameSceneController extends Controller {
 						nextBallKen = wB;
 					countPlayer1 = 0;
 					threadMain.updatePlayerCount(countPlayer1, countPlayer2);
-
 				}
 				if (new_code.equals("ENTER") && getCountPlayer2()!=0) {
 					FireBall fB = new FireBall(900, getRyuPosY(), -5);
 					EarthBall eB = new EarthBall(900, getRyuPosY(), -5);
 					WaterBall wB = new WaterBall(900, getRyuPosY(), -5);
-					if (nextBallRyu==null) {
+					if (nextBallRyu == null) {
 						FireBall temp2 = new FireBall(900, getRyuPosY(), -5);
 						temp2.setCount(getCountPlayer2());
 						temp2.createFirstPowerBall(getCountPlayer2());
@@ -223,15 +234,8 @@ public class GameSceneController extends Controller {
 	}
 
 	public void setClickedCountedFont() {
-		try {
-			txtCount1.setFont(Font.loadFont(new FileInputStream(FONT_PATH), 14));
-			txtCount2.setFont(Font.loadFont(new FileInputStream(FONT_PATH), 14));
-		} catch (FileNotFoundException e) {
-			txtCount1.setFont(Font.font("Verdana", 14));
-			txtCount2.setFont(Font.font("Verdana", 14));
-		}
 		txtCount1.relocate(20, 10);
-		txtCount2.relocate(990, 10);
+		txtCount2.relocate(570, 10);
 		mainPane.getChildren().addAll(txtCount1, txtCount2);
 	}
 
@@ -336,19 +340,64 @@ public class GameSceneController extends Controller {
 
 	public static void drawBall(PowerBall ball) {
 		ImageView im = (ball).getImageView();
-//		System.out.println(im);
 		mainPane.getChildren().remove(im);
-//		System.out.println(ball.getY());
-//		if(ball.getPlayerSide() < 0)
-//			im.relocate((double) (ball.getX()), (double) ball.getY());
-//		else if(ball.getPlayerSide() > 0);
+
+		if (ball.getPlayerSide() < 0) { // ฝั่งขวา
+			if (ball.getX() < 0 && !ball.isAttack()) {
+				int damage = (int)(ball.getCount()*0.75);
+				setKenHp(getKenHp()- damage);
+				setKenHpText(getKenHp());
+				if(getKenHp()<= 0) setKenDie(true);
+				if(isKenDie()) {
+					switchScenes(getRyuEndingScene().getMainScene());
+				}
+				ball.setAttack(true);
+			}
+		} else if (ball.getPlayerSide() > 0) {// ฝั่งซ้าย
+			if (ball.getX() > 1076 && !ball.isAttack()) {
+				int damage = (int)(ball.getCount()*0.75);
+				setRyuHp(getRyuHp()-damage);
+				setRyuHpText(getRyuHp());
+				if(getRyuHp() <= 0) setRyuDie(true);
+				if(isRyuDie()) {
+					
+					switchScenes(getKenEndingScene().getMainScene());
+				}
+				ball.setAttack(true);
+			}
+		}
 		im.relocate((double) (ball.getX()), (double) ball.getY());
+		
 		mainPane.getChildren().add(im);
+	}
+	
+	private static void switchScenes(Scene scene) {
+		mainStage.setScene(scene);
+	}
+	
+
+	public static void createKenHpBar(int khp) {
+		kenHpBar = new HpBar(Integer.toString(khp) + " hp");
+		kenHpBar.relocate(240, 10);
+		mainPane.getChildren().add(kenHpBar);
+	}
+
+	public static void createRynHpBar(int rhp) {
+		ryuHpBar = new HpBar(Integer.toString(rhp) + " hp");
+		ryuHpBar.relocate(780, 10);
+		mainPane.getChildren().add(ryuHpBar);
+	}
+	public static void setKenHpText(int khp) {
+		kenHpBar.setText(Integer.toString(khp)+" hp");
+	}
+	public static void setRyuHpText(int rhp) {
+		ryuHpBar.setText(Integer.toString(rhp)+" hp");
 	}
 
 	public static void updateCount(int count1, int count2) {
-		txtCount1.setText(Integer.toString(count1));
-		txtCount2.setText(Integer.toString(count2));
+		txtCount1.setText("Power " + Integer.toString(count1));
+		txtCount2.setText("Power " + Integer.toString(count2));
+
 	}
 
 	public int randomBall() { // 0=fireBall,1=earthBall,2=waterBall;
@@ -404,5 +453,61 @@ public class GameSceneController extends Controller {
 	public static int getCountPlayer2() {
 		return countPlayer2;
 	}
+
+	public static int getKenHp() {
+		return kenHp;
+	}
+
+	public static void setKenHp(int kenHp) {
+		GameSceneController.kenHp = kenHp < 0 ? 0 : kenHp;
+	}
+
+	public static int getRyuHp() {
+		return ryuHp;
+	}
+
+	public static void setRyuHp(int ryuHp) {
+		GameSceneController.ryuHp = ryuHp < 0 ? 0 : ryuHp;
+	}
+
+	public ThreadMain getThreadMain() {
+		return threadMain;
+	}
+
+	public static boolean isKenDie() {
+		return isKenDie;
+	}
+
+	public static void setKenDie(boolean iskendie) {
+		isKenDie = iskendie;
+	}
+
+	public static boolean isRyuDie() {
+		return isRyuDie;
+	}
+
+	public static void setRyuDie(boolean isryudie) {
+		isRyuDie = isryudie;
+	}
+
+	public static RyuEndingSceneController getRyuEndingScene() {
+		return ryuEndingScene;
+	}
+
+	public void setRyuEndingScene(RyuEndingSceneController ryuEndingScene) {
+		this.ryuEndingScene = ryuEndingScene;
+	}
+
+	public static KenEndingSceneController getKenEndingScene() {
+		return kenEndingScene;
+	}
+
+	public void setKenEndingScene(KenEndingSceneController kenEndingScene) {
+		this.kenEndingScene = kenEndingScene;
+	}
+	
+	
+	
+	
 
 }

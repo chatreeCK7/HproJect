@@ -9,14 +9,10 @@ import javafx.util.Duration;
 
 public class WaterBall extends PowerBall{
 	private static final Image waterBalll = new Image("/entity/res/waterBall.gif");
+
 	public WaterBall(int x, int highLevel, int playerSide) {
 		super(x, highLevel, playerSide);
 		imageView = new ImageView(waterBalll);
-//		if(playerSide > 0)
-//			createFirstPowerBall(super.getCount());
-//		else 
-//			createFirstPowerBall(super.getCount());
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

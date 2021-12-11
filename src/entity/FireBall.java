@@ -9,14 +9,10 @@ import javafx.util.Duration;
 
 public class FireBall extends PowerBall{
 	private static final Image fireBalll = new Image("/entity/res/fireBall.png");
+
 	public FireBall(int x, int highLevel, int playerSide) {
 		super(x, highLevel, playerSide);
 		imageView = new ImageView(fireBalll);
-//		if(playerSide > 0)
-//			createFirstPowerBall(super.getCount());
-//		else 
-//			createFirstPowerBall(super.getCount());
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
