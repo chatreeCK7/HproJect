@@ -8,62 +8,72 @@ import javafx.util.Duration;
 import scene.controller.GameSceneController;
 
 public abstract class PowerBall {
-	
-	int x, y, highLevel, speedX, speedY, playerSide, power;
+
+	int x, y, highLevel, speedX, speedY, playerSide, count;
 	boolean isInMap;
 	ImageView imageView;
 
-	public PowerBall(int x,int highLevel,int playerSide,int power) {
+	public PowerBall(int x, int highLevel, int playerSide) {
 		this.x = x;
-		this.y = 10 + highLevel*80;
-		setPower(power);
+		this.y = highLevel;
 		speedX = playerSide;
 		speedY = 0;
-		isInMap=true;
+		isInMap = true;
 		// TODO Auto-generated constructor stub
 	}
-	
+
 	abstract public void createFirstPowerBall(int count);
+
 	abstract public ImageView getImageView();
-	
+
 	public void update() {
-		System.out.println(this.x);
-		if(this.x<1000)
-			this.x +=speedX;
+//		System.out.println(this.x);
+		if (this.x < 1100)
+			this.x += speedX;
 		else {
 //			GameSceneController.removeFromPane(imageView);
-			isInMap=false;
+			isInMap = false;
 		}
 	}
+
 	public boolean isInMap() {
 		return isInMap;
 	}
+
 	public int getX() {
 		return x;
 	}
+
 	public int getY() {
 		return y;
 	}
+
 	public int getHighLevel() {
 		return highLevel;
 	}
+
 	public int getSpeedX() {
 		return speedX;
 	}
+
 	public int getSpeedY() {
 		return speedY;
 	}
+
 	public int getPlayerSide() {
 		return playerSide;
 	}
 
-	public int getPower() {
-		return power;
+	public void setY(int y) {
+		this.y = y;
 	}
 
-	public void setPower(int power) {
-		this.power = power;
+	public int getCount() {
+		return count;
 	}
-	
-	
+
+	public void setCount(int count) {
+		this.count = count;
+	}
+
 }

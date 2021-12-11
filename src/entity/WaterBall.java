@@ -9,18 +9,15 @@ import javafx.util.Duration;
 
 public class WaterBall extends PowerBall{
 	private static final Image waterBalll = new Image("/entity/res/waterBall.gif");
-	public WaterBall(int x, int highLevel, int playerSide, int power) {
-		super(x, highLevel, playerSide, power);
-		if(playerSide > 0)
-			createFirstPowerBall(GameSceneController.getCountPlayer1());
-		else 
-			createFirstPowerBall(GameSceneController.getCountPlayer2());
-		// TODO Auto-generated constructor stub
+
+	public WaterBall(int x, int highLevel, int playerSide) {
+		super(x, highLevel, playerSide);
 	}
 
 	@Override
 	public void createFirstPowerBall(int count) {
 		// TODO Auto-generated method stub
+		System.out.println(count);
 		double size = 0.18+0.004*count;
 		imageView = new ImageView(waterBalll);
 		imageView.setFitHeight(size*imageView.prefHeight(1));
