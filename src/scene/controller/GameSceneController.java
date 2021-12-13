@@ -136,10 +136,12 @@ public class GameSceneController extends Controller {
 					WaterBall wB = new WaterBall(100, getKenPosY(), 5);
 					if (nextBallKen == null) {
 						FireBall temp = new FireBall(100, getKenPosY(), 5);
+//						System.out.println("Player1: "+getCountPlayer1());
 						temp.setCount(getCountPlayer1());
 						temp.createFirstPowerBall(getCountPlayer1());
 						threadMain.initalizeNewPlayer1(temp);
 					} else {
+//						System.out.println("Player1: "+getCountPlayer1());
 						nextBallKen.setCount(getCountPlayer1());
 						nextBallKen.setY(getKenPosY());
 						nextBallKen.createFirstPowerBall(getCountPlayer1());
@@ -161,11 +163,13 @@ public class GameSceneController extends Controller {
 					EarthBall eB = new EarthBall(900, getRyuPosY(), -5);
 					WaterBall wB = new WaterBall(900, getRyuPosY(), -5);
 					if (nextBallRyu == null) {
+//						System.out.println("Player2: "+getCountPlayer2());
 						FireBall temp2 = new FireBall(900, getRyuPosY(), -5);
 						temp2.setCount(getCountPlayer2());
 						temp2.createFirstPowerBall(getCountPlayer2());
 						threadMain.initalizeNewPlayer2(temp2);
 					} else {
+//						System.out.println("Player2: "+getCountPlayer2());
 						nextBallRyu.setY(getRyuPosY());
 						nextBallRyu.setCount(getCountPlayer2());
 						nextBallRyu.createFirstPowerBall(getCountPlayer2());
@@ -342,8 +346,8 @@ public class GameSceneController extends Controller {
 		ImageView im = (ball).getImageView();
 		mainPane.getChildren().remove(im);
 
-		if (ball.getPlayerSide() < 0) { // ฝั่งขวา
-			if (ball.getX() < 0 && !ball.isAttack()) {
+		if (ball.getPlayerSide() < 0) { // Ryu attack
+			if (ball.getX() == 0 && !ball.isAttack()) {
 				int damage = (int)(ball.getCount()*0.75);
 				setKenHp(getKenHp()- damage);
 				setKenHpText(getKenHp());
@@ -353,8 +357,8 @@ public class GameSceneController extends Controller {
 				}
 				ball.setAttack(true);
 			}
-		} else if (ball.getPlayerSide() > 0) {// ฝั่งซ้าย
-			if (ball.getX() > 1076 && !ball.isAttack()) {
+		} else if (ball.getPlayerSide() > 0) {	//Ken attack
+			if (ball.getX() == 1080 && !ball.isAttack()) {
 				int damage = (int)(ball.getCount()*0.75);
 				setRyuHp(getRyuHp()-damage);
 				setRyuHpText(getRyuHp());
@@ -505,9 +509,4 @@ public class GameSceneController extends Controller {
 	public void setKenEndingScene(KenEndingSceneController kenEndingScene) {
 		this.kenEndingScene = kenEndingScene;
 	}
-	
-	
-	
-	
-
 }

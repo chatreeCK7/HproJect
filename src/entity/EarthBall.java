@@ -9,10 +9,13 @@ import javafx.util.Duration;
 
 public class EarthBall extends PowerBall {
 	private static final Image EarthBall = new Image("/entity/res/earthBall.gif");
-
+	private double Height;
+	private double Width;
 	public EarthBall(int x, int highLevel, int playerSide) {
 		super(x, highLevel, playerSide);
 		imageView = new ImageView(EarthBall);
+		Height = imageView.prefHeight(1);
+		Width = imageView.prefWidth(1);
 	}
 
 	@Override
@@ -20,8 +23,8 @@ public class EarthBall extends PowerBall {
 		// TODO Auto-generated method stub
 		System.out.println(count);
 		double size = 0.06+0.004*count;
-		imageView.setFitHeight(size*imageView.prefHeight(1));
-		imageView.setFitWidth(size*imageView.prefWidth(1));
+		imageView.setFitHeight(size*Height);
+		imageView.setFitWidth(size*Width);
 	}
 
 	@Override
@@ -33,5 +36,12 @@ public class EarthBall extends PowerBall {
 	public static Image getEarthball() {
 		return EarthBall;
 	}
+
+	@Override
+	public PowerBallType getElement() {
+		// TODO Auto-generated method stub
+		return PowerBallType.EARTH;
+	}
+
 
 }
