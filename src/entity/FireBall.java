@@ -9,10 +9,13 @@ import javafx.util.Duration;
 
 public class FireBall extends PowerBall{
 	private static final Image fireBalll = new Image("/entity/res/fireBall.png");
-
+	private double Height;
+	private double Width;
 	public FireBall(int x, int highLevel, int playerSide) {
 		super(x, highLevel, playerSide);
 		imageView = new ImageView(fireBalll);
+		Height = imageView.prefHeight(1);
+		Width = imageView.prefWidth(1);
 	}
 
 	@Override
@@ -20,8 +23,8 @@ public class FireBall extends PowerBall{
 		System.out.println(count);
 		// TODO Auto-generated method stub
 		double size = 0.05+0.004*count;
-		imageView.setFitHeight(size*imageView.prefHeight(1));
-		imageView.setFitWidth(size*imageView.prefWidth(1));
+		imageView.setFitHeight(size*Height);
+		imageView.setFitWidth(size*Width);
 	}
 
 	@Override
@@ -33,6 +36,12 @@ public class FireBall extends PowerBall{
 
 	public static Image getFireballl() {
 		return fireBalll;
+	}
+
+	@Override
+	public PowerBallType getElement() {
+		// TODO Auto-generated method stub
+		return PowerBallType.FIRE;
 	}
 	
 
