@@ -26,9 +26,8 @@ public abstract class PowerBall {
 	}
 
 	abstract public void createFirstPowerBall(int count);
-
 	abstract public ImageView getImageView();
-
+	abstract public PowerBallType getElement();
 	public void setImageView(ImageView iV) {
 		imageView = iV;
 	}
@@ -98,5 +97,6 @@ public abstract class PowerBall {
 	public void setX(int x) {
 		this.x = x;
 	}
+	
 
 }
