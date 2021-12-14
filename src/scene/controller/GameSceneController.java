@@ -53,6 +53,7 @@ public class GameSceneController extends Controller {
 
 	private ArrayList<ArrayList<PowerBall>> p1Ball;
 	private ArrayList<ArrayList<PowerBall>> p2Ball;
+	private static Item mainItem;
 
 	private static AnchorPane mainPane;
 	private Scene mainScene;
@@ -89,6 +90,7 @@ public class GameSceneController extends Controller {
 		initializePlayer();
 		initializeNextBallBar();
 		setClickedCountedFont();
+		threadMain.intializeRespawnItem();
 		createKenHpBar(getKenHp());
 		createRynHpBar(getRyuHp());
 		mainScene = new Scene(mainPane, WIDTH, HEIGHT);
@@ -243,6 +245,13 @@ public class GameSceneController extends Controller {
 		ImageView backgroundImgView = new ImageView(BACKGROUND);
 		mainPane.getChildren().add(backgroundImgView);
 	}
+	
+	public static void initializeItem() {
+		mainItem = Item.randomItem();
+		ImageView itemImage = mainItem.getItem(mainItem.getItemLabel());
+		itemImage.relocate(mainItem.getPosX(), mainItem.randomPosY());
+		mainPane.getChildren().add(itemImage);
+	}
 
 	protected void initializePlayer() {
 		kenn = new ImageView(KEN);
@@ -341,7 +350,6 @@ public class GameSceneController extends Controller {
 	public static void drawBall(PowerBall ball) {
 		ImageView im = (ball).getImageView();
 		mainPane.getChildren().remove(im);
-
 		if (ball.getPlayerSide() < 0) { // ฝั่งขวา
 			if (ball.getX() < 0 && !ball.isAttack()) {
 				int damage = (int)(ball.getCount()*0.75);
@@ -367,14 +375,12 @@ public class GameSceneController extends Controller {
 			}
 		}
 		im.relocate((double) (ball.getX()), (double) ball.getY());
-		
 		mainPane.getChildren().add(im);
 	}
 	
 	private static void switchScenes(Scene scene) {
 		mainStage.setScene(scene);
 	}
-	
 
 	public static void createKenHpBar(int khp) {
 		kenHpBar = new HpBar(Integer.toString(khp) + " hp");
@@ -505,9 +511,22 @@ public class GameSceneController extends Controller {
 	public void setKenEndingScene(KenEndingSceneController kenEndingScene) {
 		this.kenEndingScene = kenEndingScene;
 	}
-	
-	
-	
+
+	public static Item getMainItem() {
+		return mainItem;
+	}
+
+	public static void setMainItem(Item mainItem) {
+		GameSceneController.mainItem = mainItem;
+	}
+
+	public static AnchorPane getMainPane() {
+		return mainPane;
+	}
+
+	public static void setMainPane(AnchorPane mainPane) {
+		GameSceneController.mainPane = mainPane;
+	}
 	
 
 }
