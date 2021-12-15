@@ -9,13 +9,13 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.media.AudioClip;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 public class StartSubScene extends SubScene {
 
-	private static final String FONT_PATH = "src/component/res/PressStart2P-vaV7.ttf";
 	private static final String BACKGROUND_IMAGE = "/component/res/text_box_8-bit.png";
 
 	private boolean toHide;

@@ -2,8 +2,10 @@ package entity;
 
 import java.util.Random;
 
+import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import scene.controller.GameSceneController;
 
 public class Item {
 	
@@ -13,13 +15,18 @@ public class Item {
 	private int posY;
 	private ImageView itemImage;
 	
+	public Item() {
+		setName("none");
+		setItemLabel(-1);
+	}
+	
 	public Item(String name,int Label) {
 		setName(name);
 		setItemLabel(Label);
 		// TODO Auto-generated constructor stub
 	}
-	
-	public ImageView getItem(int itemLabel) {
+
+	public ImageView getItemImage(int itemLabel) {
 		switch (itemLabel){
 		case 0: {
 			itemImage = new  ImageView(new Image("/scene/controller/res/shield.png"));
@@ -69,13 +76,13 @@ public class Item {
 		int textlabel = rand.nextInt(3);
 		switch (textlabel) {
 		case 0: {
-			return new Item("shield", 0);
+			return new Shield("shield", 0);
 		}
 		case 1: {
-			return new Item("hpPotion", 1);
+			return new HpPotion("hpPotion", 1);
 		}
 		case 2: {
-			return new Item("dmPotion", 2);
+			return new DmPotion("dmPotion", 2);
 		}
 		default:
 			throw new IllegalArgumentException("Unexpected value: " + textlabel);
@@ -117,6 +124,28 @@ public class Item {
 
 	public int getPosX() {
 		return posX;
+	}
+	
+	public void respawnItem() {
+		new Thread(()->{
+			GameSceneController.setMainItem(Item.randomItem());
+			while(true) {
+				try {
+					int min = 4000;  
+					int max = 7000;  
+					int t = (int)(Math.random()*(max-min+1)+min);
+					Thread.sleep(t);
+					Platform.runLater(()->{
+						GameSceneController.getMainPane().getChildren().remove(GameSceneController.getMainItem().getItemImage());
+						System.out.println("setEmpty completed ");
+						GameSceneController.randomItem();
+					});
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}).start();
 	}
 	
 	
