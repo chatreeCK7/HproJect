@@ -19,9 +19,11 @@ public class HpPotion extends Item implements Interactable {
 		// TODO Auto-generated method stub
 		if(side == 'l') {
 			GameSceneController.setKenHp(GameSceneController.getKenHp()+15);
+			GameSceneController.setKenHpText(GameSceneController.getKenHp());
 			return true;
 		}else  if(side == 'r') {
 			GameSceneController.setRyuHp(GameSceneController.getRyuHp()+15);
+			GameSceneController.setRyuHpText(GameSceneController.getRyuHp());
 			return true;
 		}
 		return false;

@@ -103,7 +103,7 @@ public class GameSceneController extends Controller {
 		mainStage.setTitle("Hadoz");
 
 	}
-
+	
 	public GameSceneController(String fXMLPath, Controller controllerCaller) {
 		super(fXMLPath, controllerCaller);
 		// TODO Auto-generated constructor stub
@@ -247,6 +247,7 @@ public class GameSceneController extends Controller {
 	
 	public static void itemGotCatched() {
 		mainPane.getChildren().remove(getMainItem().getItemImage());
+		getMainItem().getItemImage().relocate((double) (-100), (double) (-100));
 	}
 	
 	
@@ -386,7 +387,7 @@ public class GameSceneController extends Controller {
 	}
 
 	private static void switchScenes(Scene scene) {
-		mainStage.setScene(scene);
+		StartSceneController.getMainStage().setScene(scene);
 	}
 
 	public void playSound() {
@@ -445,7 +446,7 @@ public class GameSceneController extends Controller {
 	}
 
 	public void setMainStage(Stage mainStage) {
-		this.mainStage = mainStage;
+		GameSceneController.mainStage = mainStage;
 	}
 
 	public Scene getMainScene() {
@@ -469,7 +470,7 @@ public class GameSceneController extends Controller {
 	}
 
 	public void setKenPosY(int kenPosY) {
-		this.kenPosY = kenPosY;
+		GameSceneController.kenPosY = kenPosY;
 	}
 
 	public int getRyuPosX() {
@@ -485,7 +486,7 @@ public class GameSceneController extends Controller {
 	}
 
 	public void setRyuPosY(int ryuPosY) {
-		this.ryuPosY = ryuPosY;
+		GameSceneController.ryuPosY = ryuPosY;
 	}
 
 	public static int getCountPlayer1() {
@@ -562,7 +563,7 @@ public class GameSceneController extends Controller {
 	}
 
 	public void setRyuEndingScene(RyuEndingSceneController ryuEndingScene) {
-		this.ryuEndingScene = ryuEndingScene;
+		GameSceneController.ryuEndingScene = ryuEndingScene;
 	}
 
 	public static KenEndingSceneController getKenEndingScene() {
@@ -570,7 +571,7 @@ public class GameSceneController extends Controller {
 	}
 
 	public void setKenEndingScene(KenEndingSceneController kenEndingScene) {
-		this.kenEndingScene = kenEndingScene;
+		GameSceneController.kenEndingScene = kenEndingScene;
 	}
 
 	public static Item getMainItem() {

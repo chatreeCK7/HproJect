@@ -8,7 +8,7 @@ import scene.controller.GameSceneController;
 
 public class ThreadMain {
 	private static final Image Empty = new Image("/scene/controller/res/Empty Sprite.png");
-	private Item mainItem = GameSceneController.getMainItem();
+	private Item mainItem;
 	private static int xTopLaneKen;
 	private static int xMidLaneKen;
 	private static int xBottomLaneKen;
@@ -26,25 +26,26 @@ public class ThreadMain {
 		new Thread(()->{
 			xKenInit();
 			xRyuInit();
-			updatePlayerMovementKen(ball);
+			updateBallMovementKen(ball);
 		}).start();
 	}
 	public void initalizeNewPlayer2(PowerBall ball) {
 		new Thread(()->{
 			xKenInit();
 			xRyuInit();
-			updatePlayerMovementRyu(ball);
+			updateBallMovementRyu(ball);
 		}).start();
 	}
 	
-	protected void updatePlayerMovementKen(PowerBall ball) {
+	protected void updateBallMovementKen(PowerBall ball) {
 		try {
 			while(ball.isInMap()) {
 				Thread.sleep(50);
 				Platform.runLater(()->{
+					mainItem = GameSceneController.getMainItem();
 					((PowerBall)ball).update();
 					GameSceneController.drawBall(ball);
-					
+					updateItem(ball, mainItem);
 					if(ball.getX()>xTopLaneKen && ball.getY()==0) {	//	Top lane
 						xTopLaneKen = ball.getX();
 						topBallKen = ball;
@@ -83,28 +84,16 @@ public class ThreadMain {
 				e.printStackTrace();
 		}
 	}
-	protected void updateItem(PowerBall b,Item item) {
-		int posBallX = b.getX();int posBallY = b.getY();
-		int posItemX = item.getPosX();int posItemY = item.getPosY();
-		
-		if(xTopLaneKen ==  || xTopLaneKen == xTopLaneRyu+5 ) {	//Check Boom Top
-			BooMMM(topBallKen,topBallRyu);
-		}
-		if(xMidLaneKen == xMidLaneRyu || xMidLaneKen == xMidLaneRyu+5 ) {	//Check Boom Mid
-			BooMMM(midBallKen,midBallRyu);
-		}
-		if(xBottomLaneKen == xBottomLaneRyu || xBottomLaneKen == xBottomLaneRyu+5 ) {	//Check Boom Bottom
-			BooMMM(bottomBallKen,bottomBallRyu);
-		}
-	}
 	
-	protected void updatePlayerMovementRyu(PowerBall ball) {
+	protected void updateBallMovementRyu(PowerBall ball) {
 		try {
 			while(ball.isInMap()) {
 				Thread.sleep(50);
+				mainItem = GameSceneController.getMainItem();
 				Platform.runLater(()->{
 					((PowerBall)ball).update();
 					GameSceneController.drawBall(ball);
+					updateItem(ball, mainItem);
 					if(ball.getX()<xTopLaneRyu && ball.getY()==0) {
 						xTopLaneRyu = ball.getX();
 						topBallRyu = ball;
@@ -146,7 +135,26 @@ public class ThreadMain {
 		}
 	}
 	
-//	public void updateItemStatus();
+	protected void updateItem(PowerBall b,Item item) {
+		int posBallX = b.getX();int posBallY = b.getY();
+		int posItemX = item.getPosX();int posItemY = item.getPosY();
+		boolean checkX = (posBallX == posItemX);
+		boolean checkY = (posBallY == posItemY);
+		char s = b.getPlayerSide() < 0 ? 'r' : 'l';
+		
+		if(checkX && checkY) {	//Check Item
+			if(item instanceof Shield) { // < 0 : RyuAttack , > 0 : KenAttack
+				((Shield)item).interact(s);
+			}else if(item instanceof HpPotion) {
+				((HpPotion)item).interact(s);
+			}else if(item instanceof DmPotion) {
+				((DmPotion)item).interact(s);
+			}
+			GameSceneController.itemGotCatched();
+		}
+		
+	}
+	
 	public void updatePlayerCount(int count1,int count2) {
 		new Thread(()->{
 			Platform.runLater(()->{
