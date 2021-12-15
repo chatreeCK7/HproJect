@@ -84,6 +84,7 @@ public class ThreadMain {
 				e.printStackTrace();
 		}
 	}
+
 	
 	protected void updateBallMovementRyu(PowerBall ball) {
 		try {
@@ -184,6 +185,7 @@ public class ThreadMain {
 		isBoomBoth(BallRyu,BallKen);
 		isBoom(BallKen,BallRyu);
 		isBoom(BallRyu,BallKen);
+		Thread.currentThread().interrupt();
 	}
 	
 	public void isBoom(PowerBall lossBall,PowerBall winBall) {

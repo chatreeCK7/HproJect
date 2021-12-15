@@ -53,7 +53,7 @@ public class GameSceneController extends Controller {
 	private static boolean isKenDie = false;
 	private static boolean isRyuDie = false;
 
-	private AudioClip sceneSound;
+	private static AudioClip sceneSound;
 	private static Item mainItem;
 
 	private static AnchorPane mainPane;
@@ -79,6 +79,7 @@ public class GameSceneController extends Controller {
 		// TODO Auto-generated constructor stub
 		sceneSound = new AudioClip(ClassLoader.getSystemResource("scene/controller/res/BG_sound.wav").toString());
 //		runBackgroundSound();
+		
 		ryuEndingScene = new RyuEndingSceneController();
 		kenEndingScene = new KenEndingSceneController();
 		threadMain = new ThreadMain();
@@ -101,7 +102,7 @@ public class GameSceneController extends Controller {
 		setOnCharged();
 		mainStage.setScene(mainScene);
 		mainStage.setTitle("Hadoz");
-
+//		System.exit(0);
 	}
 	
 	public GameSceneController(String fXMLPath, Controller controllerCaller) {
@@ -116,6 +117,7 @@ public class GameSceneController extends Controller {
 	}
 
 	public void setOnCharged() {
+		
 		mainScene.setOnKeyPressed((KeyEvent e) -> {
 			String new_code = e.getCode().toString();
 //			System.out.println(new_code);
@@ -222,6 +224,8 @@ public class GameSceneController extends Controller {
 		mainScene.setOnKeyReleased(new EventHandler<KeyEvent>() {
 			@Override
 			public void handle(KeyEvent event) {
+				Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
+				System.out.println(threadSet);
 				trigger = false;
 			}
 		});
@@ -359,8 +363,12 @@ public class GameSceneController extends Controller {
 				}
 				if (getKenHp() <= 0)
 					setKenDie(true);
-				if (isKenDie()) {
+				if (isKenDie()) {	//End Game
+					System.out.println(Thread.currentThread());
+					sceneSound.stop();
+					Thread.currentThread().interrupt();
 					switchScenes(getRyuEndingScene().getMainScene());
+//					mainStage.close();
 				}
 				ball.setAttack(true);
 			}
@@ -375,9 +383,12 @@ public class GameSceneController extends Controller {
 				}
 				if (getRyuHp() <= 0)
 					setRyuDie(true);
-				if (isRyuDie()) {
-
+				if (isRyuDie()) {	//End Game
+					System.out.print(Thread.currentThread());
+					sceneSound.stop();
+					Thread.currentThread().interrupt();
 					switchScenes(getKenEndingScene().getMainScene());
+//					mainStage.close();
 				}
 				ball.setAttack(true);
 			}
@@ -590,7 +601,7 @@ public class GameSceneController extends Controller {
 		GameSceneController.mainPane = mainPane;
 	}
 
-	public AudioClip getSceneSound() {
+	public static AudioClip getSceneSound() {
 		return sceneSound;
 	}
 

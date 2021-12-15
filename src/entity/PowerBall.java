@@ -38,6 +38,7 @@ public abstract class PowerBall {
 			this.x +=speedX;
 		else {
 //			GameSceneController.removeFromPane(imageView);
+			Thread.currentThread().interrupt();
 			isInMap = false;
 		}
 	}
