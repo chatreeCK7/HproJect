@@ -21,6 +21,13 @@ public class ThreadMain {
 	private static PowerBall midBallRyu;
 	private static PowerBall bottomBallRyu;
 	
+	public void intializeRespawnItem() {
+			new Thread(()->{
+				respawnItem(GameSceneController.getMainItem());
+			}).start();
+
+	}
+	
 	public void initalizeNewPlayer1(PowerBall ball) {
 		new Thread(()->{
 			xKenInit();
@@ -198,6 +205,27 @@ public class ThreadMain {
 			BallRyu.setX(9999);
 		}
 	}
+	
+	public void respawnItem(Item item) {
+		GameSceneController.setMainItem(Item.randomItem());
+		while(true) {
+			try {
+				int min = 4000;  
+				int max = 7000;  
+				int t = (int)(Math.random()*(max-min+1)+min);
+				Thread.sleep(t);
+				Platform.runLater(()->{
+					GameSceneController.getMainPane().getChildren().remove(GameSceneController.getMainItem().getItemImage());
+					System.out.println("setEmpty completed ");
+					GameSceneController.initializeItem();
+				});
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	public void xKenInit() {
 		xTopLaneKen=0;
 		xMidLaneKen=0;
