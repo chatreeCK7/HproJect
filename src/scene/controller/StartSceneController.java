@@ -31,7 +31,7 @@ public class StartSceneController extends Controller {
 	private AnchorPane mainPane;
 	private Scene mainScene;
 	private GameSceneController gameScene;
-	private Stage mainStage;
+	private static Stage mainStage;
 
 	private final static int MENU_BUTTONS_START_X = 417;
 	private final static int MENU_BUTTONS_START_Y = 296;
@@ -78,12 +78,12 @@ public class StartSceneController extends Controller {
 
 	}
 
-	public Stage getMainStage() {
+	public static Stage getMainStage() {
 		return mainStage;
 	}
 
-	public void setMainStage(Stage mainStage) {
-		this.mainStage = mainStage;
+	public static void setMainStage(Stage mainStage) {
+		StartSceneController.mainStage = mainStage;
 	}
 
 	private void addMenuButton(HaDozButton btn) {
@@ -199,5 +199,6 @@ public class StartSceneController extends Controller {
 				BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT, null);
 		mainPane.setBackground(new Background(background));
 	}
-
+	
+	
 }
