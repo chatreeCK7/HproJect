@@ -1,26 +1,29 @@
 package scene.controller;
 
-import component.HpBar;
-import javafx.application.Application;
+import component.EndingText;
+import component.ExitText;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.media.AudioClip;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-public class KenEndingSceneController  {
+public class KenEndingSceneController {
 
 	private AnchorPane mainPane;
 	private Scene mainScene;
 	private Stage mainStage;
 
+	private AudioClip sound = new AudioClip(ClassLoader.getSystemResource("component/res/ken-ending.wav").toString());
 	private final String IMGPATH = "/scene/controller/res/ken-ending.gif";
-	private HpBar endingText;
-	private HpBar winnerText;
+	private EndingText winnerText;
+	private ExitText exitText;
 
 	public KenEndingSceneController() {
 		mainPane = new AnchorPane();
@@ -29,42 +32,41 @@ public class KenEndingSceneController  {
 		mainStage.setTitle("Ken is Winner !");
 		mainStage.setScene(mainScene);
 		createBackground();
-		createText("K O!");
-		createWinnerText("Winnerr !! is K E N ");
-
+		createWinnerText("Winner!! is K E N");
+		createExitText("Press to space exit.");
+		exit();
 		// TODO Auto-generated constructor stub
 	}
 
-//	@Override
-//	public void start(Stage primaryStage) throws Exception {
-//		// TODO Auto-generated method stub
-//		primaryStage = mainStage;
-//		primaryStage.show();
-//
-//	}
-//
-//	public static void main(String[] args) {
-//		launch(args);
-//	}
+	public void exit() {
+		mainScene.setOnKeyPressed((KeyEvent e) -> {
+			String new_code = e.getCode().toString();
+			if (new_code.equals("SPACE"))
+				System.exit(0);
+		});
+	}
+
+	public void playSound() {
+		sound.play();
+	}
 
 	public void createBackground() {
 		Image kenEnding = new Image(IMGPATH, 1024, 576, false, true);
 		BackgroundImage background = new BackgroundImage(kenEnding, BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT,
 				BackgroundPosition.DEFAULT, null);
 		mainPane.setBackground(new Background(background));
-
-	}
-
-	public void createText(String text) {
-		endingText = new HpBar(text);
-		mainPane.getChildren().add(endingText);
-		endingText.relocate(170, 30);
 	}
 
 	public void createWinnerText(String text) {
-		winnerText = new HpBar(text);
+		winnerText = new EndingText(text, Color.BLACK);
 		mainPane.getChildren().add(winnerText);
-		endingText.relocate(270, 30);
+		winnerText.relocate(120, 30);
+	}
+
+	public void createExitText(String text) {
+		exitText = new ExitText(text, Color.BLACK);
+		mainPane.getChildren().add(exitText);
+		exitText.relocate(165, 450);
 	}
 
 	public AnchorPane getMainPane() {

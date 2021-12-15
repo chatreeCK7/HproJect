@@ -1,9 +1,12 @@
 package entity;
 
 import entity.base.Interactable;
+import javafx.scene.media.AudioClip;
 import scene.controller.GameSceneController;
 
 public class HpPotion extends Item implements Interactable {
+	
+	private AudioClip sound = new AudioClip(ClassLoader.getSystemResource("component/res/Shield.wav").toString());
 
 	public HpPotion() {
 		// TODO Auto-generated constructor stub
@@ -20,10 +23,12 @@ public class HpPotion extends Item implements Interactable {
 		if(side == 'l') {
 			GameSceneController.setKenHp(GameSceneController.getKenHp()+15);
 			GameSceneController.setKenHpText(GameSceneController.getKenHp());
+			sound.play();
 			return true;
 		}else  if(side == 'r') {
 			GameSceneController.setRyuHp(GameSceneController.getRyuHp()+15);
 			GameSceneController.setRyuHpText(GameSceneController.getRyuHp());
+			sound.play();
 			return true;
 		}
 		return false;

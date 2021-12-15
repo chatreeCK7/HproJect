@@ -1,11 +1,6 @@
 package entity;
 
-import javafx.animation.Animation;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.util.Duration;
-import scene.controller.GameSceneController;
 
 public abstract class PowerBall {
 
