@@ -8,6 +8,7 @@ import java.util.*;
 import application.ThreadMain;
 import component.CountLabel;
 import component.HpBar;
+import component.ShieldBar;
 import entity.*;
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -28,53 +29,44 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class GameSceneController extends Controller {
-	private static final Image BACKGROUND = new Image("/scene/controller/res/Background1.png");
 	private static final Image KEN = new Image("/scene/controller/res/ken_player.gif");
 	private static final Image RYU = new Image("/scene/controller/res/ryu_player.gif");
-	private static final Image EMPTY = new Image("/scene/controller/res/Empty Sprite.png");
 	private static final String FONT_PATH = "/scene/controller/res/PressStart2P-vaV7.ttf";
-	private static final int HEIGHT = 576;
-	private static final int WIDTH = 1024;
-	private static int countPlayer1;
-	private static int countPlayer2;
-	private static PowerBall nextBallKen;
-	private static PowerBall nextBallRyu;
+	private static final Image EMPTY = new Image("/scene/controller/res/Empty Sprite.png");
+	private static final Image BACKGROUND = new Image("/scene/controller/res/Background1.png");
+	private static int countPlayer1, countPlayer2;
+	private static PowerBall nextBallKen, nextBallRyu;
+	private static final int HEIGHT = 576, WIDTH = 1024;
 
-	private ImageView kenn;
-	private ImageView ryuu;
-	private int kenPosX = 70;
-	private static int kenPosY;
-	private int ryuPosX = 900;
-	private static int ryuPosY;
+	private ImageView kenn, ryuu;
+	private static int kenPosY, ryuPosY;
+	private static HpBar kenHpBar, ryuHpBar;
+	private int kenPosX = 70, ryuPosX = 900;
 	private static int kenHp = 100, ryuHp = 100;
-	private static boolean isKenShielded = false,isRyuShielded = false;
-	private static HpBar kenHpBar;
-	private static HpBar ryuHpBar;
-	private static boolean isKenDie = false;
-	private static boolean isRyuDie = false;
+	private static ShieldBar kenShielded, ryuShielded;
+	private static boolean isKenShielded = false, isRyuShielded = false;
+	private static boolean isKenDie = false, isRyuDie = false;
 
 	private AudioClip sceneSound;
 	private static Item mainItem;
 
-	private static AnchorPane mainPane;
 	private Scene mainScene;
-	private static Stage mainStage;
 	private ThreadMain threadMain;
+	private static Stage mainStage;
+	private static AnchorPane mainPane;
 	private static RyuEndingSceneController ryuEndingScene;
 	private static KenEndingSceneController kenEndingScene;
 	private ImageView firePicRyu = new ImageView(entity.FireBall.getFireballl());
 	private ImageView EarthPicRyu = new ImageView(entity.EarthBall.getEarthball());
 	private ImageView WaterPicRyu = new ImageView(entity.WaterBall.getWaterballl());
-
 	private ImageView firePicKen = new ImageView(entity.FireBall.getFireballl());
 	private ImageView EarthPicKen = new ImageView(entity.EarthBall.getEarthball());
 	private ImageView WaterPicKen = new ImageView(entity.WaterBall.getWaterballl());
 
-	Canvas canvas = new Canvas();
-	GraphicsContext ctx = canvas.getGraphicsContext2D();
 	private static CountLabel txtCount1, txtCount2;
 	boolean trigger = false;
-
+	
+/*================================================ Constructor ================================================*/
 	public GameSceneController() {
 		// TODO Auto-generated constructor stub
 		sceneSound = new AudioClip(ClassLoader.getSystemResource("scene/controller/res/BG_sound.wav").toString());
@@ -93,6 +85,8 @@ public class GameSceneController extends Controller {
 		initializePlayer();
 		initializeNextBallBar();
 		setClickedCountedFont();
+		createKenShieldBar();
+		createRyuShieldBar();
 		mainItem = new Item();
 		mainItem.respawnItem();
 		createKenHpBar(getKenHp());
@@ -103,7 +97,7 @@ public class GameSceneController extends Controller {
 		mainStage.setTitle("Hadoz");
 
 	}
-	
+
 	public GameSceneController(String fXMLPath, Controller controllerCaller) {
 		super(fXMLPath, controllerCaller);
 		// TODO Auto-generated constructor stub
@@ -114,6 +108,8 @@ public class GameSceneController extends Controller {
 		// TODO Auto-generated method stub
 
 	}
+	
+/*================================================ Method ================================================*/
 
 	public void setOnCharged() {
 		mainScene.setOnKeyPressed((KeyEvent e) -> {
@@ -227,12 +223,6 @@ public class GameSceneController extends Controller {
 		});
 	}
 
-	public void setClickedCountedFont() {
-		txtCount1.relocate(20, 10);
-		txtCount2.relocate(570, 10);
-		mainPane.getChildren().addAll(txtCount1, txtCount2);
-	}
-
 	protected void drawBackground() {
 		ImageView backgroundImgView = new ImageView(BACKGROUND);
 		mainPane.getChildren().add(backgroundImgView);
@@ -244,13 +234,12 @@ public class GameSceneController extends Controller {
 		itemImage.relocate(mainItem.getPosX(), mainItem.randomPosY());
 		mainPane.getChildren().add(itemImage);
 	}
-	
+
 	public static void itemGotCatched() {
 		mainPane.getChildren().remove(getMainItem().getItemImage());
 		getMainItem().getItemImage().relocate((double) (-100), (double) (-100));
 	}
-	
-	
+
 	protected void initializePlayer() {
 		kenn = new ImageView(KEN);
 //        removeFromPane(kenn);
@@ -351,33 +340,37 @@ public class GameSceneController extends Controller {
 		if (ball.getPlayerSide() < 0) { // Ryu attack
 			if (ball.getX() == 0 && !ball.isAttack()) {
 				int damage = (int) (ball.getCount() * 0.75);
-				if(!isKenShielded) {
+				if (!isKenShielded) {
 					setKenHp(getKenHp() - damage);
 					setKenHpText(getKenHp());
-				}else {
+				} else {
 					setKenShielded(false);
+					setKenShieldText(false);
 				}
 				if (getKenHp() <= 0)
 					setKenDie(true);
 				if (isKenDie()) {
 					switchScenes(getRyuEndingScene().getMainScene());
+					getRyuEndingScene().playSound();
 				}
 				ball.setAttack(true);
 			}
 		} else if (ball.getPlayerSide() > 0) { // Ken attack
 			if (ball.getX() == 1080 && !ball.isAttack()) {
 				int damage = (int) (ball.getCount() * 0.75);
-				if(!isRyuShielded) {
+				if (!isRyuShielded) {
 					setRyuHp(getRyuHp() - damage);
 					setRyuHpText(getRyuHp());
-				}else {
+				} else {
 					setRyuShielded(false);
+					setRyuShieldText(false);
 				}
 				if (getRyuHp() <= 0)
 					setRyuDie(true);
 				if (isRyuDie()) {
 
 					switchScenes(getKenEndingScene().getMainScene());
+					getKenEndingScene().playSound();
 				}
 				ball.setAttack(true);
 			}
@@ -394,6 +387,18 @@ public class GameSceneController extends Controller {
 		getSceneSound().setCycleCount(100);
 		getSceneSound().setVolume(10);
 		getSceneSound().play();
+	}
+
+	public void createKenShieldBar() {
+		kenShielded = new ShieldBar("not shield");
+		kenShielded.relocate(20, 35);
+		mainPane.getChildren().add(kenShielded);
+	}
+	
+	public void createRyuShieldBar() {
+		ryuShielded = new ShieldBar("not shield");
+		ryuShielded.relocate(570, 35);
+		mainPane.getChildren().add(ryuShielded);
 	}
 
 	public static void createKenHpBar(int khp) {
@@ -415,11 +420,31 @@ public class GameSceneController extends Controller {
 	public static void setRyuHpText(int rhp) {
 		ryuHpBar.setText(Integer.toString(rhp) + " hp");
 	}
+	
+	public static void setKenShieldText(boolean kshield) {
+		if(kshield)
+			kenShielded.setText("shielded !");
+		else
+			kenShielded.setText("not shielded");
+	}
+
+	public static void setRyuShieldText(boolean rshield) {
+		if(rshield)
+			ryuShielded.setText("shielded !");
+		else
+			ryuShielded.setText("not shielded");		
+	}
 
 	public static void updateCount(int count1, int count2) {
 		txtCount1.setText("Power " + Integer.toString(count1));
 		txtCount2.setText("Power " + Integer.toString(count2));
 
+	}
+
+	public void setClickedCountedFont() {
+		txtCount1.relocate(20, 10);
+		txtCount2.relocate(570, 10);
+		mainPane.getChildren().addAll(txtCount1, txtCount2);
 	}
 
 	public void runBackgroundSound() {
@@ -432,6 +457,8 @@ public class GameSceneController extends Controller {
 		int r = rand.nextInt(3);
 		return r;
 	}
+	
+/*================================================ Getter & Setter ================================================*/
 
 	public static Image getBackground() {
 		return BACKGROUND;
@@ -520,8 +547,7 @@ public class GameSceneController extends Controller {
 	public static void setRyuHp(int ryuHp) {
 		GameSceneController.ryuHp = (ryuHp < 0 || ryuHp > 100) ? (ryuHp < 0 ? 0 : 100) : ryuHp;
 	}
-	
-	
+
 	public static boolean isKenShielded() {
 		return isKenShielded;
 	}
