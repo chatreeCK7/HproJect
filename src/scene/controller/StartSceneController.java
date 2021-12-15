@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import application.ThreadMain;
 import component.BackButton;
 import component.HaDozButton;
 import component.HowToLabel;
@@ -19,7 +20,7 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.text.Text;
+import javafx.scene.media.AudioClip;
 import javafx.stage.Stage;
 import scene.manager.SceneManager;
 
@@ -34,15 +35,17 @@ public class StartSceneController extends Controller {
 
 	private final static int MENU_BUTTONS_START_X = 417;
 	private final static int MENU_BUTTONS_START_Y = 296;
+	private AudioClip clickSound = new AudioClip(ClassLoader.getSystemResource("scene/controller/res/click1.wav").toString());
+	private AudioClip startSound = new AudioClip(ClassLoader.getSystemResource("scene/controller/res/starting.wav").toString());
 	
 	private StartSubScene startSubScene;
-	private StartSubScene sceneToHide;
+	private ThreadMain threadMain;
 
 	private List<HaDozButton> menuBtn;
-	private ArrayList<String> keyPath = new ArrayList<>(Arrays.asList("A_keycap.png","D_keycap.png","W_keycap.png","S_keycap.png","spacebar_keycap.png",
-			"left_arrow_keycap.png","right_arrow_keycap.png","up_arrow_keycap.png","down_arrow_keycap.png","enter_keycap.png"));
+	
 	public StartSceneController() {
 		// TODO Auto-generated constructor stub
+		threadMain =  new ThreadMain();
 		gameScene = new GameSceneController();
 		menuBtn = new ArrayList<>();
 		mainPane = new AnchorPane();
@@ -117,6 +120,7 @@ public class StartSceneController extends Controller {
 			@Override
 			public void handle(ActionEvent arg0) {
 				// TODO Auto-generated method stub
+				clickSound.play();
 				startSubScene.setToHide(true);
 				startSubScene.moveSubScene();
 			}
@@ -130,7 +134,16 @@ public class StartSceneController extends Controller {
 	
 	private void createStartButton() {
 		HaDozButton sBtn = new HaDozButton("Start !");
-		sBtn.setOnAction(e -> switchScenes(gameScene.getMainScene()));
+		sBtn.setOnAction(new EventHandler<ActionEvent>() {
+			
+			@Override
+			public void handle(ActionEvent arg0) {
+				// transition to sub scene
+				clickSound.play();
+				startSound.play();
+				switchScenes(gameScene.getMainScene());
+			}
+		});
 		addMenuButton(sBtn);
 	}
 
@@ -143,6 +156,7 @@ public class StartSceneController extends Controller {
 			@Override
 			public void handle(ActionEvent arg0) {
 				// transition to sub scene
+				clickSound.play();
 				startSubScene.moveSubScene();
 			}
 		});
@@ -157,6 +171,7 @@ public class StartSceneController extends Controller {
 			@Override
 			public void handle(ActionEvent e) {
 				// TODO Auto-generated method stub
+				clickSound.play();
 				mainStage.close();
 			}
 		});
@@ -164,6 +179,7 @@ public class StartSceneController extends Controller {
 	
 	private void switchScenes(Scene scene) {
 		mainStage.setScene(scene);
+		gameScene.playSound();
 	}
 	
 	private void createLogo() {

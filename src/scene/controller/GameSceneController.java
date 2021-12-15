@@ -21,6 +21,7 @@ import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -45,14 +46,15 @@ public class GameSceneController extends Controller {
 	private static int kenPosY;
 	private int ryuPosX = 900;
 	private static int ryuPosY;
-	private static int kenHp = 100,ryuHp = 100;
+	private static int kenHp = 100, ryuHp = 100;
+	private static boolean isKenShielded = false,isRyuShielded = false;
 	private static HpBar kenHpBar;
 	private static HpBar ryuHpBar;
 	private static boolean isKenDie = false;
 	private static boolean isRyuDie = false;
 
-	private ArrayList<ArrayList<PowerBall>> p1Ball;
-	private ArrayList<ArrayList<PowerBall>> p2Ball;
+	private AudioClip sceneSound;
+	private static Item mainItem;
 
 	private static AnchorPane mainPane;
 	private Scene mainScene;
@@ -75,6 +77,8 @@ public class GameSceneController extends Controller {
 
 	public GameSceneController() {
 		// TODO Auto-generated constructor stub
+		sceneSound = new AudioClip(ClassLoader.getSystemResource("scene/controller/res/BG_sound.wav").toString());
+//		runBackgroundSound();
 		ryuEndingScene = new RyuEndingSceneController();
 		kenEndingScene = new KenEndingSceneController();
 		threadMain = new ThreadMain();
@@ -89,6 +93,8 @@ public class GameSceneController extends Controller {
 		initializePlayer();
 		initializeNextBallBar();
 		setClickedCountedFont();
+		mainItem = new Item();
+		mainItem.respawnItem();
 		createKenHpBar(getKenHp());
 		createRynHpBar(getRyuHp());
 		mainScene = new Scene(mainPane, WIDTH, HEIGHT);
@@ -109,91 +115,75 @@ public class GameSceneController extends Controller {
 
 	}
 
-	public Stage getMainStage() {
-		return mainStage;
-	}
-
-	public void setMainStage(Stage mainStage) {
-		this.mainStage = mainStage;
-	}
-
-	public Scene getMainScene() {
-		return mainScene;
-	}
-
-	public void setMainScene(Scene mainScene) {
-		this.mainScene = mainScene;
-	}
-
 	public void setOnCharged() {
 		mainScene.setOnKeyPressed((KeyEvent e) -> {
 			String new_code = e.getCode().toString();
 //			System.out.println(new_code);
 //			if (!trigger) {
-				if (new_code.equals("SPACE") && getCountPlayer1()!=0) {
-					FireBall fB = new FireBall(100, getKenPosY(), 5);
-					EarthBall eB = new EarthBall(100, getKenPosY(), 5);
-					WaterBall wB = new WaterBall(100, getKenPosY(), 5);
-					if (nextBallKen == null) {
-						FireBall temp = new FireBall(100, getKenPosY(), 5);
+			if (new_code.equals("SPACE") && getCountPlayer1() != 0) {
+				FireBall fB = new FireBall(100, getKenPosY(), 5);
+				EarthBall eB = new EarthBall(100, getKenPosY(), 5);
+				WaterBall wB = new WaterBall(100, getKenPosY(), 5);
+				if (nextBallKen == null) {
+					FireBall temp = new FireBall(100, getKenPosY(), 5);
 //						System.out.println("Player1: "+getCountPlayer1());
-						temp.setCount(getCountPlayer1());
-						temp.createFirstPowerBall(getCountPlayer1());
-						threadMain.initalizeNewPlayer1(temp);
-					} else {
+					temp.setCount(getCountPlayer1());
+					temp.createFirstPowerBall(getCountPlayer1());
+					threadMain.initalizeNewPlayer1(temp);
+				} else {
 //						System.out.println("Player1: "+getCountPlayer1());
-						nextBallKen.setCount(getCountPlayer1());
-						nextBallKen.setY(getKenPosY());
-						nextBallKen.createFirstPowerBall(getCountPlayer1());
-						threadMain.initalizeNewPlayer1(nextBallKen);
-					}
-					int r = randomBall();
-					appearNextBallKen(r);
-					if (r == 0)
-						nextBallKen = fB;
-					if (r == 1)
-						nextBallKen = eB;
-					if (r == 2)
-						nextBallKen = wB;
-					countPlayer1 = 0;
-					threadMain.updatePlayerCount(countPlayer1, countPlayer2);
+					nextBallKen.setCount(getCountPlayer1());
+					nextBallKen.setY(getKenPosY());
+					nextBallKen.createFirstPowerBall(getCountPlayer1());
+					threadMain.initalizeNewPlayer1(nextBallKen);
 				}
-				if (new_code.equals("ENTER") && getCountPlayer2()!=0) {
-					FireBall fB = new FireBall(900, getRyuPosY(), -5);
-					EarthBall eB = new EarthBall(900, getRyuPosY(), -5);
-					WaterBall wB = new WaterBall(900, getRyuPosY(), -5);
-					if (nextBallRyu == null) {
+				int r = randomBall();
+				appearNextBallKen(r);
+				if (r == 0)
+					nextBallKen = fB;
+				if (r == 1)
+					nextBallKen = eB;
+				if (r == 2)
+					nextBallKen = wB;
+				countPlayer1 = 0;
+				threadMain.updatePlayerCount(countPlayer1, countPlayer2);
+			}
+			if (new_code.equals("ENTER") && getCountPlayer2() != 0) {
+				FireBall fB = new FireBall(900, getRyuPosY(), -5);
+				EarthBall eB = new EarthBall(900, getRyuPosY(), -5);
+				WaterBall wB = new WaterBall(900, getRyuPosY(), -5);
+				if (nextBallRyu == null) {
 //						System.out.println("Player2: "+getCountPlayer2());
-						FireBall temp2 = new FireBall(900, getRyuPosY(), -5);
-						temp2.setCount(getCountPlayer2());
-						temp2.createFirstPowerBall(getCountPlayer2());
-						threadMain.initalizeNewPlayer2(temp2);
-					} else {
+					FireBall temp2 = new FireBall(900, getRyuPosY(), -5);
+					temp2.setCount(getCountPlayer2());
+					temp2.createFirstPowerBall(getCountPlayer2());
+					threadMain.initalizeNewPlayer2(temp2);
+				} else {
 //						System.out.println("Player2: "+getCountPlayer2());
-						nextBallRyu.setY(getRyuPosY());
-						nextBallRyu.setCount(getCountPlayer2());
-						nextBallRyu.createFirstPowerBall(getCountPlayer2());
-						threadMain.initalizeNewPlayer2(nextBallRyu);
-					}
-					int r = randomBall();
-					appearNextBallRyu(r);
-					if (r == 0)
-						nextBallRyu = fB;
-					if (r == 1)
-						nextBallRyu = eB;
-					if (r == 2)
-						nextBallRyu = wB;
-					countPlayer2 = 0;
-					threadMain.updatePlayerCount(countPlayer1, countPlayer2);
+					nextBallRyu.setY(getRyuPosY());
+					nextBallRyu.setCount(getCountPlayer2());
+					nextBallRyu.createFirstPowerBall(getCountPlayer2());
+					threadMain.initalizeNewPlayer2(nextBallRyu);
 				}
-				if (new_code.equals("A") || new_code.equals("D")) {
-					countPlayer1++;
-					threadMain.updatePlayerCount(countPlayer1, countPlayer2);
-				}
-				if (new_code.equals("RIGHT") || new_code.equals("LEFT")) {
-					countPlayer2++;
-					threadMain.updatePlayerCount(countPlayer1, countPlayer2);
-				}
+				int r = randomBall();
+				appearNextBallRyu(r);
+				if (r == 0)
+					nextBallRyu = fB;
+				if (r == 1)
+					nextBallRyu = eB;
+				if (r == 2)
+					nextBallRyu = wB;
+				countPlayer2 = 0;
+				threadMain.updatePlayerCount(countPlayer1, countPlayer2);
+			}
+			if (new_code.equals("A") || new_code.equals("D")) {
+				countPlayer1++;
+				threadMain.updatePlayerCount(countPlayer1, countPlayer2);
+			}
+			if (new_code.equals("RIGHT") || new_code.equals("LEFT")) {
+				countPlayer2++;
+				threadMain.updatePlayerCount(countPlayer1, countPlayer2);
+			}
 //				trigger = true;
 //			}
 
@@ -248,6 +238,18 @@ public class GameSceneController extends Controller {
 		mainPane.getChildren().add(backgroundImgView);
 	}
 
+	public static void randomItem() {
+		mainItem = Item.randomItem();
+		ImageView itemImage = mainItem.getItemImage(mainItem.getItemLabel());
+		itemImage.relocate(mainItem.getPosX(), mainItem.randomPosY());
+		mainPane.getChildren().add(itemImage);
+	}
+	
+	public static void itemGotCatched() {
+		mainPane.getChildren().remove(getMainItem().getItemImage());
+	}
+	
+	
 	protected void initializePlayer() {
 		kenn = new ImageView(KEN);
 //        removeFromPane(kenn);
@@ -345,40 +347,53 @@ public class GameSceneController extends Controller {
 	public static void drawBall(PowerBall ball) {
 		ImageView im = (ball).getImageView();
 		mainPane.getChildren().remove(im);
-
 		if (ball.getPlayerSide() < 0) { // Ryu attack
 			if (ball.getX() == 0 && !ball.isAttack()) {
-				int damage = (int)(ball.getCount()*0.75);
-				setKenHp(getKenHp()- damage);
-				setKenHpText(getKenHp());
-				if(getKenHp()<= 0) setKenDie(true);
-				if(isKenDie()) {
+				int damage = (int) (ball.getCount() * 0.75);
+				if(!isKenShielded) {
+					setKenHp(getKenHp() - damage);
+					setKenHpText(getKenHp());
+				}else {
+					setKenShielded(false);
+				}
+				if (getKenHp() <= 0)
+					setKenDie(true);
+				if (isKenDie()) {
 					switchScenes(getRyuEndingScene().getMainScene());
 				}
 				ball.setAttack(true);
 			}
-		} else if (ball.getPlayerSide() > 0) {	//Ken attack
+		} else if (ball.getPlayerSide() > 0) { // Ken attack
 			if (ball.getX() == 1080 && !ball.isAttack()) {
-				int damage = (int)(ball.getCount()*0.75);
-				setRyuHp(getRyuHp()-damage);
-				setRyuHpText(getRyuHp());
-				if(getRyuHp() <= 0) setRyuDie(true);
-				if(isRyuDie()) {
-					
+				int damage = (int) (ball.getCount() * 0.75);
+				if(!isRyuShielded) {
+					setRyuHp(getRyuHp() - damage);
+					setRyuHpText(getRyuHp());
+				}else {
+					setRyuShielded(false);
+				}
+				if (getRyuHp() <= 0)
+					setRyuDie(true);
+				if (isRyuDie()) {
+
 					switchScenes(getKenEndingScene().getMainScene());
 				}
 				ball.setAttack(true);
 			}
 		}
 		im.relocate((double) (ball.getX()), (double) ball.getY());
-		
 		mainPane.getChildren().add(im);
 	}
-	
+
 	private static void switchScenes(Scene scene) {
 		mainStage.setScene(scene);
 	}
-	
+
+	public void playSound() {
+		getSceneSound().setCycleCount(100);
+		getSceneSound().setVolume(10);
+		getSceneSound().play();
+	}
 
 	public static void createKenHpBar(int khp) {
 		kenHpBar = new HpBar(Integer.toString(khp) + " hp");
@@ -391,17 +406,24 @@ public class GameSceneController extends Controller {
 		ryuHpBar.relocate(780, 10);
 		mainPane.getChildren().add(ryuHpBar);
 	}
+
 	public static void setKenHpText(int khp) {
-		kenHpBar.setText(Integer.toString(khp)+" hp");
+		kenHpBar.setText(Integer.toString(khp) + " hp");
 	}
+
 	public static void setRyuHpText(int rhp) {
-		ryuHpBar.setText(Integer.toString(rhp)+" hp");
+		ryuHpBar.setText(Integer.toString(rhp) + " hp");
 	}
 
 	public static void updateCount(int count1, int count2) {
 		txtCount1.setText("Power " + Integer.toString(count1));
 		txtCount2.setText("Power " + Integer.toString(count2));
 
+	}
+
+	public void runBackgroundSound() {
+		while (true)
+			this.sceneSound.play();
 	}
 
 	public int randomBall() { // 0=fireBall,1=earthBall,2=waterBall;
@@ -416,6 +438,22 @@ public class GameSceneController extends Controller {
 
 	public static Image getKen() {
 		return KEN;
+	}
+
+	public Stage getMainStage() {
+		return mainStage;
+	}
+
+	public void setMainStage(Stage mainStage) {
+		this.mainStage = mainStage;
+	}
+
+	public Scene getMainScene() {
+		return mainScene;
+	}
+
+	public void setMainScene(Scene mainScene) {
+		this.mainScene = mainScene;
 	}
 
 	public int getKenPosX() {
@@ -454,8 +492,16 @@ public class GameSceneController extends Controller {
 		return countPlayer1;
 	}
 
+	public static void setCountPlayer1(int countPlayer1) {
+		GameSceneController.countPlayer1 = countPlayer1;
+	}
+
 	public static int getCountPlayer2() {
 		return countPlayer2;
+	}
+
+	public static void setCountPlayer2(int countPlayer2) {
+		GameSceneController.countPlayer2 = countPlayer2;
 	}
 
 	public static int getKenHp() {
@@ -463,7 +509,7 @@ public class GameSceneController extends Controller {
 	}
 
 	public static void setKenHp(int kenHp) {
-		GameSceneController.kenHp = kenHp < 0 ? 0 : kenHp;
+		GameSceneController.kenHp = (kenHp < 0 || kenHp > 100) ? (kenHp < 0 ? 0 : 100) : kenHp;
 	}
 
 	public static int getRyuHp() {
@@ -471,7 +517,24 @@ public class GameSceneController extends Controller {
 	}
 
 	public static void setRyuHp(int ryuHp) {
-		GameSceneController.ryuHp = ryuHp < 0 ? 0 : ryuHp;
+		GameSceneController.ryuHp = (ryuHp < 0 || ryuHp > 100) ? (ryuHp < 0 ? 0 : 100) : ryuHp;
+	}
+	
+	
+	public static boolean isKenShielded() {
+		return isKenShielded;
+	}
+
+	public static void setKenShielded(boolean isKenShielded) {
+		GameSceneController.isKenShielded = isKenShielded;
+	}
+
+	public static boolean isRyuShielded() {
+		return isRyuShielded;
+	}
+
+	public static void setRyuShielded(boolean isRyuShielded) {
+		GameSceneController.isRyuShielded = isRyuShielded;
 	}
 
 	public ThreadMain getThreadMain() {
@@ -509,4 +572,29 @@ public class GameSceneController extends Controller {
 	public void setKenEndingScene(KenEndingSceneController kenEndingScene) {
 		this.kenEndingScene = kenEndingScene;
 	}
+
+	public static Item getMainItem() {
+		return mainItem;
+	}
+
+	public static void setMainItem(Item mainItem) {
+		GameSceneController.mainItem = mainItem;
+	}
+
+	public static AnchorPane getMainPane() {
+		return mainPane;
+	}
+
+	public static void setMainPane(AnchorPane mainPane) {
+		GameSceneController.mainPane = mainPane;
+	}
+
+	public AudioClip getSceneSound() {
+		return sceneSound;
+	}
+
+	public void setSceneSound(AudioClip sceneSound) {
+		this.sceneSound = sceneSound;
+	}
+
 }
