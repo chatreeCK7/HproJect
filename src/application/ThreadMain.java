@@ -26,18 +26,18 @@ public class ThreadMain {
 		new Thread(()->{
 			xKenInit();
 			xRyuInit();
-			updatePlayerMovementKen(ball);
+			updateBallMovementKen(ball);
 		}).start();
 	}
 	public void initalizeNewPlayer2(PowerBall ball) {
 		new Thread(()->{
 			xKenInit();
 			xRyuInit();
-			updatePlayerMovementRyu(ball);
+			updateBallMovementRyu(ball);
 		}).start();
 	}
 	
-	protected void updatePlayerMovementKen(PowerBall ball) {
+	protected void updateBallMovementKen(PowerBall ball) {
 		try {
 			while(ball.isInMap()) {
 				Thread.sleep(50);
@@ -87,7 +87,7 @@ public class ThreadMain {
 		int posBallX = b.getX();int posBallY = b.getY();
 		int posItemX = item.getPosX();int posItemY = item.getPosY();
 		
-		if(xTopLaneKen ==  || xTopLaneKen == xTopLaneRyu+5 ) {	//Check Boom Top
+		if(xTopLaneKen == xTopLaneRyu || xTopLaneKen == xTopLaneRyu+5 ) {	//Check Boom Top
 			BooMMM(topBallKen,topBallRyu);
 		}
 		if(xMidLaneKen == xMidLaneRyu || xMidLaneKen == xMidLaneRyu+5 ) {	//Check Boom Mid
@@ -98,7 +98,7 @@ public class ThreadMain {
 		}
 	}
 	
-	protected void updatePlayerMovementRyu(PowerBall ball) {
+	protected void updateBallMovementRyu(PowerBall ball) {
 		try {
 			while(ball.isInMap()) {
 				Thread.sleep(50);
@@ -176,6 +176,7 @@ public class ThreadMain {
 		isBoomBoth(BallRyu,BallKen);
 		isBoom(BallKen,BallRyu);
 		isBoom(BallRyu,BallKen);
+		Thread.currentThread().interrupt();
 	}
 	
 	public void isBoom(PowerBall lossBall,PowerBall winBall) {
