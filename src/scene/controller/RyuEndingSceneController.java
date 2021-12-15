@@ -2,9 +2,9 @@ package scene.controller;
 
 import component.EndingText;
 import component.ExitText;
-import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
@@ -19,7 +19,7 @@ public class RyuEndingSceneController {
 	private AnchorPane mainPane;
 	private Scene mainScene;
 	private Stage mainStage;
-	
+
 	private AudioClip sound = new AudioClip(ClassLoader.getSystemResource("component/res/ryu-ending.wav").toString());
 	private final String IMGPATH = "/scene/controller/res/ryu-sunset.gif";
 	private EndingText winnerText;
@@ -33,39 +33,41 @@ public class RyuEndingSceneController {
 		mainStage.setScene(mainScene);
 		createBackground();
 		createWinnerText("Winner!! is R Y U");
-		createExitText("Press to exit.");
+		createExitText("Press to space exit.");
 		exit();
 
 		// TODO Auto-generated constructor stub
 	}
-	
+
 	public void exit() {
-		mainScene.setOnKeyPressed((KeyEvent) -> {
-			System.exit(0);
+		mainScene.setOnKeyPressed((KeyEvent e) -> {
+			String new_code = e.getCode().toString();
+			if (new_code.equals("SPACE"))
+				System.exit(0);
 		});
 	}
-	
+
 	public void playSound() {
 		sound.play();
 	}
-	
+
 	public void createBackground() {
 		Image ryuEnding = new Image(IMGPATH, 1024, 576, false, true);
 		BackgroundImage background = new BackgroundImage(ryuEnding, BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT,
 				BackgroundPosition.DEFAULT, null);
 		mainPane.setBackground(new Background(background));
 	}
-	
+
 	public void createWinnerText(String text) {
-		winnerText = new EndingText(text,Color.WHITESMOKE);
+		winnerText = new EndingText(text, Color.WHITESMOKE);
 		mainPane.getChildren().add(winnerText);
 		winnerText.relocate(120, 30);
 	}
-	
+
 	public void createExitText(String text) {
-		exitText = new ExitText(text,Color.WHITESMOKE);
+		exitText = new ExitText(text, Color.WHITESMOKE);
 		mainPane.getChildren().add(exitText);
-		exitText.relocate(270, 450);
+		exitText.relocate(165, 450);
 	}
 
 	public AnchorPane getMainPane() {
@@ -91,6 +93,5 @@ public class RyuEndingSceneController {
 	public void setMainStage(Stage mainStage) {
 		this.mainStage = mainStage;
 	}
-
 
 }

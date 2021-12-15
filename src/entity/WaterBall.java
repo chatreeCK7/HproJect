@@ -1,11 +1,7 @@
 package entity;
 
-import scene.controller.*;
-import javafx.animation.Animation;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.util.Duration;
 
 public class WaterBall extends PowerBall{
 	private static final Image waterBalll = new Image("/entity/res/waterBall.gif");
