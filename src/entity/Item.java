@@ -98,11 +98,11 @@ public class Item {
 			return getPosY();
 		}
 		case 1: {
-			this.posY = 220;
+			this.posY = 170;
 			return getPosY();
 		}
 		case 2: {
-			this.posY = 100;
+			this.posY = 0;
 			return getPosY();
 		}
 		default:
