@@ -8,6 +8,7 @@ import scene.controller.GameSceneController;
 
 public class ThreadMain {
 	private static final Image Empty = new Image("/scene/controller/res/Empty Sprite.png");
+	private Item mainItem = GameSceneController.getMainItem();
 	private static int xTopLaneKen;
 	private static int xMidLaneKen;
 	private static int xBottomLaneKen;
@@ -20,13 +21,6 @@ public class ThreadMain {
 	private static PowerBall topBallRyu;
 	private static PowerBall midBallRyu;
 	private static PowerBall bottomBallRyu;
-	
-	public void intializeRespawnItem() {
-			new Thread(()->{
-				respawnItem(GameSceneController.getMainItem());
-			}).start();
-
-	}
 	
 	public void initalizeNewPlayer1(PowerBall ball) {
 		new Thread(()->{
@@ -89,6 +83,20 @@ public class ThreadMain {
 				e.printStackTrace();
 		}
 	}
+	protected void updateItem(PowerBall b,Item item) {
+		int posBallX = b.getX();int posBallY = b.getY();
+		int posItemX = item.getPosX();int posItemY = item.getPosY();
+		
+		if(xTopLaneKen ==  || xTopLaneKen == xTopLaneRyu+5 ) {	//Check Boom Top
+			BooMMM(topBallKen,topBallRyu);
+		}
+		if(xMidLaneKen == xMidLaneRyu || xMidLaneKen == xMidLaneRyu+5 ) {	//Check Boom Mid
+			BooMMM(midBallKen,midBallRyu);
+		}
+		if(xBottomLaneKen == xBottomLaneRyu || xBottomLaneKen == xBottomLaneRyu+5 ) {	//Check Boom Bottom
+			BooMMM(bottomBallKen,bottomBallRyu);
+		}
+	}
 	
 	protected void updatePlayerMovementRyu(PowerBall ball) {
 		try {
@@ -137,6 +145,8 @@ public class ThreadMain {
 				e.printStackTrace();
 		}
 	}
+	
+//	public void updateItemStatus();
 	public void updatePlayerCount(int count1,int count2) {
 		new Thread(()->{
 			Platform.runLater(()->{
@@ -203,26 +213,6 @@ public class ThreadMain {
 			ImageView temp2 = new ImageView(Empty);
 			BallRyu.setImageView(temp2);
 			BallRyu.setX(9999);
-		}
-	}
-	
-	public void respawnItem(Item item) {
-		GameSceneController.setMainItem(Item.randomItem());
-		while(true) {
-			try {
-				int min = 4000;  
-				int max = 7000;  
-				int t = (int)(Math.random()*(max-min+1)+min);
-				Thread.sleep(t);
-				Platform.runLater(()->{
-					GameSceneController.getMainPane().getChildren().remove(GameSceneController.getMainItem().getItemImage());
-					System.out.println("setEmpty completed ");
-					GameSceneController.initializeItem();
-				});
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 		}
 	}
 	
