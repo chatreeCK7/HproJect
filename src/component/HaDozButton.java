@@ -1,7 +1,6 @@
 package component;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -11,7 +10,7 @@ import javafx.scene.text.Font;
 
 public class HaDozButton extends Button {
 	
-	private final String FONT_PATH = "src/component/res/PressStart2P-vaV7.ttf";
+	private final String FONT_PATH = "/component/res/PressStart2P-vaV7.ttf";
 	private final String BUTTON_PRESSED_STYLE = "-fx-background-color: transparent; -fx-background-image: url('/component/res/green_button05_pressed.png');";
 	private final String BUTTON_FREE_STYLE = "-fx-background-color: transparent; -fx-background-image: url('/component/res/green_button04_spacebar.png');";
 	
@@ -27,11 +26,8 @@ public class HaDozButton extends Button {
 	}
 	
 	public void setButtonFont() {
-		try {
-			setFont(Font.loadFont(new FileInputStream(FONT_PATH), 14));
-		}catch(FileNotFoundException e){
-			setFont(Font.font("Verdana",14));
-		}
+		InputStream i = getClass().getResourceAsStream(FONT_PATH);
+		setFont(Font.loadFont(i, 14));
 		
 	}
 	

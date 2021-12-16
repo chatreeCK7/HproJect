@@ -13,6 +13,7 @@ public class Item {
 	private int itemLabel;
 	private final int posX = 480;
 	private int posY;
+	private boolean isCollision;
 	private ImageView itemImage;
 
 	public Item() {
@@ -23,6 +24,7 @@ public class Item {
 	public Item(String name, int label) {
 		setName(name);
 		setItemLabel(label);
+		setCollision(false);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -51,7 +53,6 @@ public class Item {
 		}
 
 	}
-
 	public static Item randomItem() {
 		Random rand = new Random();
 		int textlabel = rand.nextInt(3);
@@ -116,6 +117,14 @@ public class Item {
 
 	public int getPosY() {
 		return posY;
+	}
+	
+	public boolean isCollision() {
+		return isCollision;
+	}
+
+	public void setCollision(boolean isCollision) {
+		this.isCollision = isCollision;
 	}
 
 	public ImageView getItemImage() {

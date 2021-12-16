@@ -59,7 +59,6 @@ public class GameSceneController {
 	public GameSceneController() {
 		// TODO Auto-generated constructor stub
 		sceneSound = new AudioClip(ClassLoader.getSystemResource("scene/controller/res/BG_sound.wav").toString());
-//		runBackgroundSound();
 
 		ryuEndingScene = new RyuEndingSceneController();
 		kenEndingScene = new KenEndingSceneController();
@@ -85,7 +84,6 @@ public class GameSceneController {
 		setOnCharged();
 		mainStage.setScene(mainScene);
 		mainStage.setTitle("Hadoz");
-//		System.exit(0);
 	}
 
 	/*
@@ -97,20 +95,16 @@ public class GameSceneController {
 
 		mainScene.setOnKeyPressed((KeyEvent e) -> {
 			String new_code = e.getCode().toString();
-//			System.out.println(new_code);
-//			if (!trigger) {
 			if (new_code.equals("SPACE") && getCountPlayer1() != 0) {
 				FireBall fB = new FireBall(100, getKenPosY(), 5);
 				EarthBall eB = new EarthBall(100, getKenPosY(), 5);
 				WaterBall wB = new WaterBall(100, getKenPosY(), 5);
 				if (nextBallKen == null) {
 					FireBall temp = new FireBall(100, getKenPosY(), 5);
-//						System.out.println("Player1: "+getCountPlayer1());
 					temp.setCount(getCountPlayer1());
 					temp.createFirstPowerBall(getCountPlayer1());
 					threadMain.initalizeNewPlayer1(temp);
 				} else {
-//						System.out.println("Player1: "+getCountPlayer1());
 					nextBallKen.setCount(getCountPlayer1());
 					nextBallKen.setY(getKenPosY());
 					nextBallKen.createFirstPowerBall(getCountPlayer1());
@@ -132,13 +126,11 @@ public class GameSceneController {
 				EarthBall eB = new EarthBall(900, getRyuPosY(), -5);
 				WaterBall wB = new WaterBall(900, getRyuPosY(), -5);
 				if (nextBallRyu == null) {
-//						System.out.println("Player2: "+getCountPlayer2());
 					FireBall temp2 = new FireBall(900, getRyuPosY(), -5);
 					temp2.setCount(getCountPlayer2());
 					temp2.createFirstPowerBall(getCountPlayer2());
 					threadMain.initalizeNewPlayer2(temp2);
 				} else {
-//						System.out.println("Player2: "+getCountPlayer2());
 					nextBallRyu.setY(getRyuPosY());
 					nextBallRyu.setCount(getCountPlayer2());
 					nextBallRyu.createFirstPowerBall(getCountPlayer2());
@@ -163,8 +155,6 @@ public class GameSceneController {
 				countPlayer2++;
 				threadMain.updatePlayerCount(countPlayer1, countPlayer2);
 			}
-//				trigger = true;
-//			}
 
 			switch (new_code) {
 			case "W": {
@@ -227,7 +217,6 @@ public class GameSceneController {
 
 	protected void initializePlayer() {
 		kenn = new ImageView(KEN);
-//        removeFromPane(kenn);
 		kenn.setFitHeight(0.3 * kenn.prefHeight(1));
 		kenn.setFitWidth(0.3 * kenn.prefWidth(1));
 		kenn.relocate((double) (70), (double) (340));
@@ -335,7 +324,6 @@ public class GameSceneController {
 				if (getKenHp() <= 0)
 					setKenDie(true);
 				if (isKenDie() && playSound) { // End Game
-					System.out.println(Thread.currentThread());
 					sceneSound.stop();
 					Thread.currentThread().interrupt();
 					getRyuEndingScene().playSound();
@@ -357,7 +345,6 @@ public class GameSceneController {
 				if (getRyuHp() <= 0)
 					setRyuDie(true);
 				if (isRyuDie() && playSound) { // End Game
-					System.out.print(Thread.currentThread());
 					sceneSound.stop();
 					Thread.currentThread().interrupt();
 					getKenEndingScene().playSound();

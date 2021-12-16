@@ -61,7 +61,7 @@ public class ThreadMain {
 						xBottomLaneKen = ball.getX();
 						bottomBallKen = ball;
 					}
-					if (ball.isAttack()) { // when ball attacked, deleted it and initialize
+					if (ball.isAttack()) { 
 						ImageView im = (ball).getImageView();
 						im.relocate((double) (-1), (double) -800);
 						ball.setInMap(false);
@@ -79,7 +79,6 @@ public class ThreadMain {
 					if (xBottomLaneKen == xBottomLaneRyu || xBottomLaneKen == xBottomLaneRyu + 5) { // Check Boom Bottom
 						BooMMM(bottomBallKen, bottomBallRyu);
 					}
-//					System.out.println(xTopLaneKen+" "+ball.getX());
 				});
 			}
 		} catch (InterruptedException e) {
@@ -125,7 +124,6 @@ public class ThreadMain {
 																											// Bottom
 						BooMMM(bottomBallRyu, bottomBallKen);
 					}
-//					System.out.println(xTopLaneKen+" = "+xTopLaneRyu+" "+ball.getX()+" "+ball.getY());
 
 				});
 			}
@@ -144,7 +142,7 @@ public class ThreadMain {
 		boolean checkY = (posBallY == posItemY);
 		char s = b.getPlayerSide() < 0 ? 'r' : 'l';
 
-		if (checkX && checkY) { // Check Item
+		if (checkX && checkY && !item.isCollision()) { // Check Item
 			if (item instanceof Shield) { // < 0 : RyuAttack , > 0 : KenAttack
 				((Shield) item).interact(s);
 			} else if (item instanceof HpPotion) {
@@ -152,6 +150,7 @@ public class ThreadMain {
 			} else if (item instanceof DmPotion) {
 				((DmPotion) item).interact(s);
 			}
+			item.setCollision(true);
 			GameSceneController.itemGotCatched();
 		}
 	}
