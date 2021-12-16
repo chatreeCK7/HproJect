@@ -23,11 +23,11 @@ public class Main extends Application {
 			e.printStackTrace();
 		}
 		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-			public void handle(WindowEvent we) {
-				GameSceneController.getSceneSound().stop();
-
-			}
-		});
+	          public void handle(WindowEvent we) {
+	        	  GameSceneController.getSceneSound().stop();
+	        	  System.exit(0);
+	          }
+	      });        
 	}
 
 	public static void main(String[] args) {

@@ -16,18 +16,27 @@ import javafx.scene.media.AudioClip;
 import javafx.stage.Stage;
 
 public class GameSceneController {
+	private static final Image BACKGROUND = new Image("/scene/controller/res/Background1.png");
+
 	private static final Image KEN = new Image("/scene/controller/res/ken_player.gif");
 	private static final Image RYU = new Image("/scene/controller/res/ryu_player.gif");
-	private static final Image BACKGROUND = new Image("/scene/controller/res/Background1.png");
-	private static int countPlayer1, countPlayer2;
-	private static PowerBall nextBallKen, nextBallRyu;
-	private static final int HEIGHT = 576, WIDTH = 1024;
+	private static final String FONT_PATH = "/scene/controller/res/PressStart2P-vaV7.ttf";
+	private static final int HEIGHT = 576;
+	private static final int WIDTH = 1024;
+	private static int countPlayer1;
+	private static int countPlayer2;
+	private static PowerBall nextBallKen;
+	private static PowerBall nextBallRyu;
+
+	private ImageView kenn;
+	private ImageView ryuu;
+	private int kenPosX = 70;
+	private static int kenPosY;
+	private int ryuPosX = 900;
+	private static int ryuPosY;
 
 	private static boolean playSound = true;
-	private ImageView kenn, ryuu;
-	private static int kenPosY, ryuPosY;
 	private static HpBar kenHpBar, ryuHpBar;
-	private int kenPosX = 70, ryuPosX = 900;
 	private static int kenHp = 100, ryuHp = 100;
 	private static ShieldBar kenShielded, ryuShielded;
 	private static boolean isKenShielded = false, isRyuShielded = false;
@@ -44,10 +53,11 @@ public class GameSceneController {
 	private static KenEndingSceneController kenEndingScene;
 	private ImageView firePicRyu = new ImageView(entity.FireBall.getFireballl());
 	private ImageView EarthPicRyu = new ImageView(entity.EarthBall.getEarthball());
-	private ImageView WaterPicRyu = new ImageView(entity.WaterBall.getWaterballl());
+	private ImageView WaterPicRyu = new ImageView(entity.WaterBall.getWaterball());
+
 	private ImageView firePicKen = new ImageView(entity.FireBall.getFireballl());
 	private ImageView EarthPicKen = new ImageView(entity.EarthBall.getEarthball());
-	private ImageView WaterPicKen = new ImageView(entity.WaterBall.getWaterballl());
+	private ImageView WaterPicKen = new ImageView(entity.WaterBall.getWaterball());
 
 	private static CountLabel txtCount1, txtCount2;
 	boolean trigger = false;
@@ -108,13 +118,13 @@ public class GameSceneController {
 //						System.out.println("Player1: "+getCountPlayer1());
 					temp.setCount(getCountPlayer1());
 					temp.createFirstPowerBall(getCountPlayer1());
-					threadMain.initalizeNewPlayer1(temp);
+					threadMain.initalizeNewBallKen(temp);
 				} else {
 //						System.out.println("Player1: "+getCountPlayer1());
 					nextBallKen.setCount(getCountPlayer1());
 					nextBallKen.setY(getKenPosY());
 					nextBallKen.createFirstPowerBall(getCountPlayer1());
-					threadMain.initalizeNewPlayer1(nextBallKen);
+					threadMain.initalizeNewBallKen(nextBallKen);
 				}
 				int r = randomBall();
 				appearNextBallKen(r);
@@ -136,13 +146,13 @@ public class GameSceneController {
 					FireBall temp2 = new FireBall(900, getRyuPosY(), -5);
 					temp2.setCount(getCountPlayer2());
 					temp2.createFirstPowerBall(getCountPlayer2());
-					threadMain.initalizeNewPlayer2(temp2);
+					threadMain.initalizeNewBallRyu(temp2);
 				} else {
 //						System.out.println("Player2: "+getCountPlayer2());
 					nextBallRyu.setY(getRyuPosY());
 					nextBallRyu.setCount(getCountPlayer2());
 					nextBallRyu.createFirstPowerBall(getCountPlayer2());
-					threadMain.initalizeNewPlayer2(nextBallRyu);
+					threadMain.initalizeNewBallRyu(nextBallRyu);
 				}
 				int r = randomBall();
 				appearNextBallRyu(r);
@@ -201,8 +211,8 @@ public class GameSceneController {
 		mainScene.setOnKeyReleased(new EventHandler<KeyEvent>() {
 			@Override
 			public void handle(KeyEvent event) {
-				Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
-				System.out.println(threadSet);
+//				Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
+//				System.out.println(threadSet);
 				trigger = false;
 			}
 		});
@@ -334,8 +344,9 @@ public class GameSceneController {
 				}
 				if (getKenHp() <= 0)
 					setKenDie(true);
+
 				if (isKenDie() && playSound) { // End Game
-					System.out.println(Thread.currentThread());
+//					System.out.println(Thread.currentThread());
 					sceneSound.stop();
 					Thread.currentThread().interrupt();
 					getRyuEndingScene().playSound();
@@ -356,8 +367,9 @@ public class GameSceneController {
 				}
 				if (getRyuHp() <= 0)
 					setRyuDie(true);
+
 				if (isRyuDie() && playSound) { // End Game
-					System.out.print(Thread.currentThread());
+//					System.out.print(Thread.currentThread());
 					sceneSound.stop();
 					Thread.currentThread().interrupt();
 					getKenEndingScene().playSound();
