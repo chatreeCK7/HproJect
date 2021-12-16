@@ -27,6 +27,7 @@ public class Main extends Application {
 				GameSceneController.getSceneSound().stop();
 
 			}
+			
 		});
 	}
 
