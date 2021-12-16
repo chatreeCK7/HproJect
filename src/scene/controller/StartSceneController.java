@@ -36,23 +36,10 @@ public class StartSceneController {
 			ClassLoader.getSystemResource("scene/controller/res/starting.wav").toString());
 
 	private StartSubScene startSubScene;
-<<<<<<< HEAD
-//	private ThreadMain threadMain;
-||||||| 20fe327
-	private ThreadMain threadMain;
-=======
->>>>>>> 52c76cec7490e4794315cf1d7d4352688e2cc5b5
-
 	private List<HaDozButton> menuBtn;
 
 	public StartSceneController() {
 		// TODO Auto-generated constructor stub
-<<<<<<< HEAD
-//		threadMain =  new ThreadMain();
-||||||| 20fe327
-		threadMain =  new ThreadMain();
-=======
->>>>>>> 52c76cec7490e4794315cf1d7d4352688e2cc5b5
 		gameScene = new GameSceneController();
 		menuBtn = new ArrayList<>();
 		mainPane = new AnchorPane();
@@ -66,43 +53,7 @@ public class StartSceneController {
 		createBackground();
 		createLogo();
 		createSubScene();
-<<<<<<< HEAD
-		
-		
 	}
-
-//	public StartSceneController(String fXMLPath, Controller controllerCaller) {
-//		super(fXMLPath, controllerCaller);
-//		// TODO Auto-generated constructor stub
-//		mainPane = new AnchorPane();
-//		mainScene = new Scene(mainPane, WIDTH, HEIGHT);
-//		mainStage = new Stage();
-//		mainStage.setScene(mainScene);
-//	}
-
-||||||| 20fe327
-		
-		
-	}
-
-	public StartSceneController(String fXMLPath, Controller controllerCaller) {
-		super(fXMLPath, controllerCaller);
-		// TODO Auto-generated constructor stub
-		mainPane = new AnchorPane();
-		mainScene = new Scene(mainPane, WIDTH, HEIGHT);
-		mainStage = new Stage();
-		mainStage.setScene(mainScene);
-	}
-
-	@Override
-	public void setSceneManager(SceneManager scenemanager) {
-		// TODO Auto-generated method stub
-
-	}
-=======
-
-	}
->>>>>>> 52c76cec7490e4794315cf1d7d4352688e2cc5b5
 
 	public static Stage getMainStage() {
 		return mainStage;
