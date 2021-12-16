@@ -1,0 +1,367 @@
+@startuml
+class GameSceneController {
+- {static} Image BACKGROUND
+- {static} Image KEN
+- {static} Image RYU
+- {static} String FONT_PATH
+- {static} int HEIGHT
+- {static} int WIDTH
+- {static} int countPlayer1
+- {static} int countPlayer2
+- {static} PowerBall nextBallKen
+- {static} PowerBall nextBallRyu
+- ImageView kenn
+- ImageView ryuu
+- int kenPosX
+- {static} int kenPosY
+- int ryuPosX
+- {static} int ryuPosY
+- {static} boolean playSound
+- {static} HpBar kenHpBar
+- {static} int kenHp
+- {static} ShieldBar kenShielded
+- {static} boolean isKenShielded
+- {static} boolean isKenDie
+- {static} AudioClip sceneSound
+- {static} Item mainItem
+- Scene mainScene
+- ThreadMain threadMain
+- {static} Stage mainStage
+- {static} AnchorPane mainPane
+- {static} RyuEndingSceneController ryuEndingScene
+- {static} KenEndingSceneController kenEndingScene
+- ImageView firePicRyu
+- ImageView EarthPicRyu
+- ImageView WaterPicRyu
+- ImageView firePicKen
+- ImageView EarthPicKen
+- ImageView WaterPicKen
+- {static} CountLabel txtCount1
+~ boolean trigger
++ <<Create>> GameSceneController()
++ void setOnCharged()
+# void drawBackground()
++ {static} void randomItem()
++ {static} void itemGotCatched()
+# void initializePlayer()
+# void initializeNextBallBar()
+# void appearNextBallKen(int)
+# void appearNextBallRyu(int)
++ {static} void drawBall(PowerBall)
+- {static} void switchScenes(Scene)
++ void playSound()
++ void createKenShieldBar()
++ void createRyuShieldBar()
++ {static} void createKenHpBar(int)
++ {static} void createRynHpBar(int)
++ {static} void setKenHpText(int)
++ {static} void setRyuHpText(int)
++ {static} void setKenShieldText(boolean)
++ {static} void setRyuShieldText(boolean)
++ {static} void updateCount(int,int)
++ void setClickedCountedFont()
++ int randomBall()
++ {static} Image getBackground()
++ {static} Image getKen()
++ Stage getMainStage()
++ void setMainStage(Stage)
++ Scene getMainScene()
++ void setMainScene(Scene)
++ int getKenPosX()
++ void setKenPosX(int)
++ {static} int getKenPosY()
++ void setKenPosY(int)
++ int getRyuPosX()
++ void setRyuPosX(int)
++ {static} int getRyuPosY()
++ void setRyuPosY(int)
++ {static} int getCountPlayer1()
++ {static} void setCountPlayer1(int)
++ {static} int getCountPlayer2()
++ {static} void setCountPlayer2(int)
++ {static} int getKenHp()
++ {static} void setKenHp(int)
++ {static} int getRyuHp()
++ {static} void setRyuHp(int)
++ {static} boolean isKenShielded()
++ {static} void setKenShielded(boolean)
++ {static} boolean isRyuShielded()
++ {static} void setRyuShielded(boolean)
++ ThreadMain getThreadMain()
++ {static} boolean isKenDie()
++ {static} void setKenDie(boolean)
++ {static} boolean isRyuDie()
++ {static} void setRyuDie(boolean)
++ {static} RyuEndingSceneController getRyuEndingScene()
++ void setRyuEndingScene(RyuEndingSceneController)
++ {static} KenEndingSceneController getKenEndingScene()
++ void setKenEndingScene(KenEndingSceneController)
++ {static} Item getMainItem()
++ {static} void setMainItem(Item)
++ {static} AnchorPane getMainPane()
++ {static} void setMainPane(AnchorPane)
++ {static} AudioClip getSceneSound()
++ void setSceneSound(AudioClip)
+}
+abstract class PowerBall {
+- int x
+- boolean isInMap
+# ImageView imageView
++ <<Create>> PowerBall(int,int,int)
++ {abstract}void createFirstPowerBall(int)
++ {abstract}ImageView getImageView()
++ {abstract}PowerBallType getElement()
++ void setImageView(ImageView)
++ void update()
++ boolean isInMap()
++ void setInMap(boolean)
++ int getX()
++ void setX(int)
++ int getY()
++ void setY(int)
++ int getHighLevel()
++ int getSpeedX()
++ void setHighLevel(int)
++ void setSpeedX(int)
++ void setPlayerSide(int)
++ int getPlayerSide()
++ int getCount()
++ void setCount(int)
++ boolean isAttack()
++ void setAttack(boolean)
+}
+class StartSceneController {
+- {static} int HEIGHT
+- {static} int WIDTH
+- AnchorPane mainPane
+- Scene mainScene
+- GameSceneController gameScene
+- {static} Stage mainStage
+- {static} int MENU_BUTTONS_START_X
+- {static} int MENU_BUTTONS_START_Y
+- AudioClip clickSound
+- AudioClip startSound
+- StartSubScene startSubScene
+- List<HaDozButton> menuBtn
++ <<Create>> StartSceneController()
++ {static} Stage getMainStage()
++ {static} void setMainStage(Stage)
+- void addMenuButton(HaDozButton)
+- void createSubScene()
+- void createStartButton()
+- void createHowButton()
+- void createExitButton()
+- void switchScenes(Scene)
+- void createLogo()
+- void createBackground()
+}
+class CountLabel {
+- String FONT_PATH
++ <<Create>> CountLabel(String)
+- void setLabelFont()
+}
+class HowToLabel {
+- String FONT_PATH
++ <<Create>> HowToLabel(String)
++ void setLabelfont()
+}
+class RyuEndingSceneController {
+- AnchorPane mainPane
+- Scene mainScene
+- AudioClip sound
+- String IMGPATH
+- EndingText winnerText
+- ExitText exitText
++ <<Create>> RyuEndingSceneController()
++ void exit()
++ void playSound()
++ void createBackground()
++ void createWinnerText(String)
++ void createExitText(String)
++ AnchorPane getMainPane()
++ void setMainPane(AnchorPane)
++ Scene getMainScene()
++ void setMainScene(Scene)
+}
+class ThreadMain {
+- {static} Image EMPTY
+- boolean isBoomTrigger
+- Item mainItem
+- {static} int xTopLaneKen
+- {static} int xMidLaneKen
+- {static} int xBottomLaneKen
+- {static} PowerBall topBallKen
+- {static} PowerBall midBallKen
+- {static} PowerBall bottomBallKen
+- {static} int xTopLaneRyu
+- {static} int xMidLaneRyu
+- {static} int xBottomLaneRyu
+- {static} PowerBall topBallRyu
+- {static} PowerBall midBallRyu
+- {static} PowerBall bottomBallRyu
++ <<Create>> ThreadMain()
++ void initalizeNewBallKen(PowerBall)
++ void initalizeNewBallRyu(PowerBall)
+# void updateBallMovementKen(PowerBall)
+# void updateBallMovementRyu(PowerBall)
+# void updateItem(PowerBall,Item)
++ void updatePlayerCount(int,int)
++ void BooMMM(PowerBall,PowerBall)
++ void isBoom(PowerBall,PowerBall)
++ void isBoomBoth(PowerBall,PowerBall)
++ void xKenInit()
++ void xRyuInit()
+}
+class EndingText {
+- String FONT_PATH
++ <<Create>> EndingText(String,Paint)
+- void setLabelFont(Paint)
+}
+class EarthBall {
+- {static} Image EARTHBALL
+- double Height
+- double Width
++ <<Create>> EarthBall(int,int,int)
++ void createFirstPowerBall(int)
++ ImageView getImageView()
++ {static} Image getEarthball()
++ PowerBallType getElement()
+}
+class DmPotion {
+- AudioClip sound
++ <<Create>> DmPotion()
++ boolean interact(char)
+}
+class StartSubScene {
+- {static} String BACKGROUND_IMAGE
+- boolean toHide
++ <<Create>> StartSubScene()
++ void moveSubScene()
++ void setToHide(boolean)
++ AnchorPane getPane()
+}
+class WaterBall {
+- {static} Image WATERBALL
+- double Height
+- double Width
++ <<Create>> WaterBall(int,int,int)
++ void createFirstPowerBall(int)
++ ImageView getImageView()
++ {static} Image getWaterball()
++ PowerBallType getElement()
+}
+class Shield {
+- AudioClip sound
++ <<Create>> Shield()
++ boolean interact(char)
+}
+class HpBar {
+- String FONT_PATH
++ <<Create>> HpBar(String)
+- void setLabelfont()
+}
+class BackButton {
+- String BACK_BUTTON_STYLE
++ <<Create>> BackButton()
+}
+class Main {
++ void start(Stage)
++ {static} void main(String[])
+}
+class Item {
+- String name
+- int itemLabel
+- int posX
+- int posY
+- ImageView itemImage
++ <<Create>> Item()
++ <<Create>> Item(String,int)
++ ImageView getItemImage(int)
++ {static} Item randomItem()
++ int randomPosY()
++ String getName()
++ void setName(String)
++ int getItemLabel()
++ void setItemLabel(int)
++ void setPosY(int)
++ int getPosY()
++ ImageView getItemImage()
++ void setItemImage(ImageView)
++ int getPosX()
++ void respawnItem()
+}
+class FireBall {
+- {static} Image FIREBALL
+- double Height
+- double Width
++ <<Create>> FireBall(int,int,int)
++ void createFirstPowerBall(int)
++ ImageView getImageView()
++ {static} Image getFireballl()
++ PowerBallType getElement()
+}
+class KenEndingSceneController {
+- AnchorPane mainPane
+- Scene mainScene
+- AudioClip sound
+- String IMGPATH
+- EndingText winnerText
+- ExitText exitText
++ <<Create>> KenEndingSceneController()
++ void exit()
++ void playSound()
++ void createBackground()
++ void createWinnerText(String)
++ void createExitText(String)
++ AnchorPane getMainPane()
++ void setMainPane(AnchorPane)
++ Scene getMainScene()
++ void setMainScene(Scene)
+}
+class ShieldBar {
+- String FONT_PATH
++ <<Create>> ShieldBar(String)
+- void setLabelfont()
+}
+class HaDozButton {
+- String FONT_PATH
+- String BUTTON_PRESSED_STYLE
+- String BUTTON_FREE_STYLE
++ <<Create>> HaDozButton(String)
++ void setButtonFont()
++ void setButtonPressedStyle()
++ void setButtonFreeStyle()
++ void initializeButtonListener()
+}
+class ExitText {
+- String FONT_PATH
++ <<Create>> ExitText(String,Paint)
+- void setLabelFont(Paint)
+}
+class HpPotion {
+- AudioClip sound
++ <<Create>> HpPotion()
++ boolean interact(char)
+}
+
+
+Label <|-- CountLabel
+Label <|-- HowToLabel
+Label <|-- EndingText
+PowerBall <|-- EarthBall
+Interactable <|.. DmPotion
+Item <|-- DmPotion
+SubScene <|-- StartSubScene
+PowerBall <|-- WaterBall
+Interactable <|.. Shield
+Item <|-- Shield
+Label <|-- HpBar
+Button <|-- BackButton
+Application <|-- Main
+PowerBall <|-- FireBall
+Label <|-- ShieldBar
+Button <|-- HaDozButton
+Label <|-- ExitText
+Interactable <|.. HpPotion
+Item <|-- HpPotion
+@enduml

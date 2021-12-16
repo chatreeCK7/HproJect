@@ -1,8 +1,6 @@
 package component;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
@@ -11,7 +9,7 @@ import javafx.scene.text.Font;
 
 public class ExitText extends Label {
 
-	private final String FONT_PATH = "src/component/res/PressStart2P-vaV7.ttf";
+	private final String FONT_PATH = "/component/res/PressStart2P-vaV7.ttf";
 
 	public ExitText(String text, Paint color) {
 		// TODO Auto-generated constructor stub
@@ -23,12 +21,8 @@ public class ExitText extends Label {
 	}
 
 	private void setLabelFont(Paint color) {
-		// TODO Auto-generated method stub
-		try {
-			setFont(Font.loadFont(new FileInputStream(new File(FONT_PATH)), 32));
-			setTextFill(color);
-		} catch (FileNotFoundException e) {
-			setFont(Font.font("Verdana", 32));
-		}
+		InputStream i = getClass().getResourceAsStream(FONT_PATH);
+		setFont(Font.loadFont(i, 32));
+		setTextFill(color);
 	}
 }
