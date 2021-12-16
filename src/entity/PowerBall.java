@@ -1,27 +1,20 @@
 package entity;
 
-import javafx.animation.Animation;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.util.Duration;
-import scene.controller.GameSceneController;
 
 public abstract class PowerBall {
 
-	int x, y, highLevel, speedX, speedY, playerSide, count;
-	boolean isInMap, isAttack;
-	ImageView imageView;
+	private int x, y, highLevel, speedX, playerSide, count;
+	private boolean isInMap, isAttack;
+	protected ImageView imageView;
 
 	public PowerBall(int x, int highLevel, int playerSide) {
-		this.x = x;
-		this.y = highLevel;
-		speedX = playerSide;
-		this.playerSide = playerSide;
-		speedY = 0;
-		isInMap = true;
+		setX(x);
+		setY(highLevel);
+		setSpeedX(playerSide);
+		setPlayerSide(playerSide);
+		setInMap(true);
 		setAttack(false);
-		this.playerSide = playerSide;
 		// TODO Auto-generated constructor stub
 	}
 
@@ -46,13 +39,25 @@ public abstract class PowerBall {
 	public boolean isInMap() {
 		return isInMap;
 	}
+	
+	public void setInMap(boolean isInMap) {
+		this.isInMap = isInMap;
+	}
 
 	public int getX() {
 		return x;
 	}
-
+	
+	public void setX(int x) {
+		this.x = x;
+	}
+	
 	public int getY() {
 		return y;
+	}
+	
+	public void setY(int y) {
+		this.y = y;
 	}
 
 	public int getHighLevel() {
@@ -62,17 +67,22 @@ public abstract class PowerBall {
 	public int getSpeedX() {
 		return speedX;
 	}
+	
 
-	public int getSpeedY() {
-		return speedY;
+	public void setHighLevel(int highLevel) {
+		this.highLevel = highLevel;
+	}
+
+	public void setSpeedX(int speedX) {
+		this.speedX = speedX;
+	}
+
+	public void setPlayerSide(int playerSide) {
+		this.playerSide = playerSide;
 	}
 
 	public int getPlayerSide() {
 		return playerSide;
-	}
-
-	public void setY(int y) {
-		this.y = y;
 	}
 
 	public int getCount() {
@@ -91,13 +101,9 @@ public abstract class PowerBall {
 		this.isAttack = isAttack;
 	}
 
-	public void setInMap(boolean isInMap) {
-		this.isInMap = isInMap;
-	}
+	
 
-	public void setX(int x) {
-		this.x = x;
-	}
+	
 	
 
 }

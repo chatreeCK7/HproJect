@@ -1,8 +1,6 @@
 package component;
 
-import javafx.event.EventHandler;
 import javafx.scene.control.Button;
-import javafx.scene.input.MouseEvent;
 
 public class BackButton extends Button{
 	

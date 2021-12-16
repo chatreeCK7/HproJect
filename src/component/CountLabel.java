@@ -18,10 +18,10 @@ public class CountLabel extends Label{
 		setPadding(new Insets(40));
 		setText("Power "+text);
 		setWrapText(true);
-		setLabelfont();
+		setLabelFont();
 	}
 
-	private void setLabelfont() {
+	private void setLabelFont() {
 		// TODO Auto-generated method stub
 		try {
 			setFont(Font.loadFont(new FileInputStream(new File(FONT_PATH)),23));
