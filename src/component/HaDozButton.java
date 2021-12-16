@@ -74,27 +74,7 @@ public class HaDozButton extends Button {
 			}
 			
 		});
-		
-//		setOnMouseEntered(new EventHandler<MouseEvent>(){
-//
-//			@Override
-//			public void handle(MouseEvent e) {
-//				// drop shadow
-//				setEffect(new DropShadow());
-//			}
-//			
-//		});
-//		
-//		setOnMouseExited(new EventHandler<MouseEvent>(){
-//
-//			@Override
-//			public void handle(MouseEvent e) {
-//				// set null effect
-//				setEffect(null);
-//				
-//			}
-//			
-//		});
+
 	}
 }
 

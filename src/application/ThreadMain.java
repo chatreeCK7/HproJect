@@ -21,6 +21,10 @@ public class ThreadMain {
 	private static PowerBall topBallRyu;
 	private static PowerBall midBallRyu;
 	private static PowerBall bottomBallRyu;
+	
+	public ThreadMain(){
+		
+	}
 
 	public void initalizeNewPlayer1(PowerBall ball) {
 		new Thread(() -> {

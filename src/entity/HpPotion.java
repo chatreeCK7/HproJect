@@ -9,10 +9,6 @@ public class HpPotion extends Item implements Interactable {
 	private AudioClip sound = new AudioClip(ClassLoader.getSystemResource("component/res/Shield.wav").toString());
 
 	public HpPotion() {
-		// TODO Auto-generated constructor stub
-	}
-
-	public HpPotion(String name, int Label) {
 		super("hpPotion", 1);
 		// TODO Auto-generated constructor stub
 	}

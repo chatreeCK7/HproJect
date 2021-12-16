@@ -12,13 +12,11 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
-import javafx.stage.Stage;
 
 public class KenEndingSceneController {
 
 	private AnchorPane mainPane;
 	private Scene mainScene;
-	private Stage mainStage;
 
 	private AudioClip sound = new AudioClip(ClassLoader.getSystemResource("component/res/ken-ending.wav").toString());
 	private final String IMGPATH = "/scene/controller/res/ken-ending.gif";
@@ -28,12 +26,10 @@ public class KenEndingSceneController {
 	public KenEndingSceneController() {
 		mainPane = new AnchorPane();
 		mainScene = new Scene(mainPane, 1024, 576);
-		mainStage = new Stage();
-		mainStage.setTitle("Ken is Winner !");
-		mainStage.setScene(mainScene);
 		createBackground();
 		createWinnerText("Winner!! is K E N");
-		createExitText("Press to space exit.");
+		createExitText("Press space to "
+				+ "exit.");
 		exit();
 		// TODO Auto-generated constructor stub
 	}
@@ -83,14 +79,6 @@ public class KenEndingSceneController {
 
 	public void setMainScene(Scene mainScene) {
 		this.mainScene = mainScene;
-	}
-
-	public Stage getMainStage() {
-		return mainStage;
-	}
-
-	public void setMainStage(Stage mainStage) {
-		this.mainStage = mainStage;
 	}
 
 }

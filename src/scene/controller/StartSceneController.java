@@ -85,15 +85,15 @@ public class StartSceneController {
 		panel.setFitHeight(0.45 * panel.prefHeight(1));
 		panel.setFitWidth(0.45 * panel.prefWidth(1));
 		panel.relocate((double) (125), (double) (130));
-		ImageView ryu = new ImageView(new Image("/scene/controller/res/ryu.gif"));
-		ImageView ken = new ImageView(new Image("/scene/controller/res/ken.gif"));
+		ImageView ryu = new ImageView(new Image("/scene/controller/res/ryu_player.gif"));
+		ImageView ken = new ImageView(new Image("/scene/controller/res/ken_player.gif"));
 		ryu.setFitHeight(0.4 * ryu.prefHeight(1));
 		ryu.setFitWidth(0.4 * ryu.prefWidth(1));
-		ryu.relocate((double) (440), (double) (167));
+		ryu.relocate((double) (550), (double) (167));
+		ryu.setScaleX(-1);
 		ken.setFitHeight(0.4 * ken.prefHeight(1));
 		ken.setFitWidth(0.4 * ken.prefWidth(1));
-		ken.setScaleX(-1);
-		ken.relocate((double) (550), (double) (160));
+		ken.relocate((double) (440), (double) (160));
 		BackButton bBtn = new BackButton();
 		bBtn.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -153,6 +153,7 @@ public class StartSceneController {
 				// TODO Auto-generated method stub
 				clickSound.play();
 				mainStage.close();
+				System.exit(-1);
 			}
 		});
 	}
