@@ -27,11 +27,10 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public class GameSceneController extends Controller {
+public class GameSceneController {
 	private static final Image BACKGROUND = new Image("/scene/controller/res/Background1.png");
 	private static final Image KEN = new Image("/scene/controller/res/ken_player.gif");
 	private static final Image RYU = new Image("/scene/controller/res/ryu_player.gif");
-	private static final Image EMPTY = new Image("/scene/controller/res/Empty Sprite.png");
 	private static final String FONT_PATH = "/scene/controller/res/PressStart2P-vaV7.ttf";
 	private static final int HEIGHT = 576;
 	private static final int WIDTH = 1024;
@@ -64,11 +63,11 @@ public class GameSceneController extends Controller {
 	private static KenEndingSceneController kenEndingScene;
 	private ImageView firePicRyu = new ImageView(entity.FireBall.getFireballl());
 	private ImageView EarthPicRyu = new ImageView(entity.EarthBall.getEarthball());
-	private ImageView WaterPicRyu = new ImageView(entity.WaterBall.getWaterballl());
+	private ImageView WaterPicRyu = new ImageView(entity.WaterBall.getWaterball());
 
 	private ImageView firePicKen = new ImageView(entity.FireBall.getFireballl());
 	private ImageView EarthPicKen = new ImageView(entity.EarthBall.getEarthball());
-	private ImageView WaterPicKen = new ImageView(entity.WaterBall.getWaterballl());
+	private ImageView WaterPicKen = new ImageView(entity.WaterBall.getWaterball());
 
 	Canvas canvas = new Canvas();
 	GraphicsContext ctx = canvas.getGraphicsContext2D();
@@ -104,17 +103,6 @@ public class GameSceneController extends Controller {
 		mainStage.setTitle("Hadoz");
 //		System.exit(0);
 	}
-	
-	public GameSceneController(String fXMLPath, Controller controllerCaller) {
-		super(fXMLPath, controllerCaller);
-		// TODO Auto-generated constructor stub
-	}
-
-	@Override
-	public void setSceneManager(SceneManager scenemanager) {
-		// TODO Auto-generated method stub
-
-	}
 
 	public void setOnCharged() {
 		
@@ -131,13 +119,13 @@ public class GameSceneController extends Controller {
 //						System.out.println("Player1: "+getCountPlayer1());
 					temp.setCount(getCountPlayer1());
 					temp.createFirstPowerBall(getCountPlayer1());
-					threadMain.initalizeNewPlayer1(temp);
+					threadMain.initalizeNewBallKen(temp);
 				} else {
 //						System.out.println("Player1: "+getCountPlayer1());
 					nextBallKen.setCount(getCountPlayer1());
 					nextBallKen.setY(getKenPosY());
 					nextBallKen.createFirstPowerBall(getCountPlayer1());
-					threadMain.initalizeNewPlayer1(nextBallKen);
+					threadMain.initalizeNewBallKen(nextBallKen);
 				}
 				int r = randomBall();
 				appearNextBallKen(r);
@@ -159,13 +147,13 @@ public class GameSceneController extends Controller {
 					FireBall temp2 = new FireBall(900, getRyuPosY(), -5);
 					temp2.setCount(getCountPlayer2());
 					temp2.createFirstPowerBall(getCountPlayer2());
-					threadMain.initalizeNewPlayer2(temp2);
+					threadMain.initalizeNewBallRyu(temp2);
 				} else {
 //						System.out.println("Player2: "+getCountPlayer2());
 					nextBallRyu.setY(getRyuPosY());
 					nextBallRyu.setCount(getCountPlayer2());
 					nextBallRyu.createFirstPowerBall(getCountPlayer2());
-					threadMain.initalizeNewPlayer2(nextBallRyu);
+					threadMain.initalizeNewBallRyu(nextBallRyu);
 				}
 				int r = randomBall();
 				appearNextBallRyu(r);
@@ -224,8 +212,8 @@ public class GameSceneController extends Controller {
 		mainScene.setOnKeyReleased(new EventHandler<KeyEvent>() {
 			@Override
 			public void handle(KeyEvent event) {
-				Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
-				System.out.println(threadSet);
+//				Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
+//				System.out.println(threadSet);
 				trigger = false;
 			}
 		});
@@ -364,7 +352,7 @@ public class GameSceneController extends Controller {
 				if (getKenHp() <= 0)
 					setKenDie(true);
 				if (isKenDie()) {	//End Game
-					System.out.println(Thread.currentThread());
+//					System.out.println(Thread.currentThread());
 					sceneSound.stop();
 					Thread.currentThread().interrupt();
 					switchScenes(getRyuEndingScene().getMainScene());
@@ -384,7 +372,7 @@ public class GameSceneController extends Controller {
 				if (getRyuHp() <= 0)
 					setRyuDie(true);
 				if (isRyuDie()) {	//End Game
-					System.out.print(Thread.currentThread());
+//					System.out.print(Thread.currentThread());
 					sceneSound.stop();
 					Thread.currentThread().interrupt();
 					switchScenes(getKenEndingScene().getMainScene());

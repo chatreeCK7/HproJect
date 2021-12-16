@@ -8,12 +8,12 @@ import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
 public class WaterBall extends PowerBall{
-	private static final Image waterBalll = new Image("/entity/res/waterBall.gif");
+	private static final Image WATERBALL = new Image("/entity/res/waterBall.gif");
 	private double Height;
 	private double Width;
 	public WaterBall(int x, int highLevel, int playerSide) {
 		super(x, highLevel, playerSide);
-		imageView = new ImageView(waterBalll);
+		imageView = new ImageView(WATERBALL);
 		Height = imageView.prefHeight(1);
 		Width = imageView.prefWidth(1);
 	}
@@ -34,8 +34,8 @@ public class WaterBall extends PowerBall{
 		return imageView;
 	}
 
-	public static Image getWaterballl() {
-		return waterBalll;
+	public static Image getWaterball() {
+		return WATERBALL;
 	}
 
 	@Override

@@ -26,6 +26,7 @@ public class Main extends Application {
 		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 	          public void handle(WindowEvent we) {
 	        	  GameSceneController.getSceneSound().stop();
+	        	  System.exit(0);
 //	        	  Environment.Exit(Environment.ExitCode);
 //	              System.out.println("Stage is closing");
 	          }

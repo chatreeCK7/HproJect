@@ -24,7 +24,7 @@ import javafx.scene.media.AudioClip;
 import javafx.stage.Stage;
 import scene.manager.SceneManager;
 
-public class StartSceneController extends Controller {
+public class StartSceneController {
 
 	private static final int HEIGHT = 576;
 	private static final int WIDTH = 1024;
@@ -39,13 +39,13 @@ public class StartSceneController extends Controller {
 	private AudioClip startSound = new AudioClip(ClassLoader.getSystemResource("scene/controller/res/starting.wav").toString());
 	
 	private StartSubScene startSubScene;
-	private ThreadMain threadMain;
+//	private ThreadMain threadMain;
 
 	private List<HaDozButton> menuBtn;
 	
 	public StartSceneController() {
 		// TODO Auto-generated constructor stub
-		threadMain =  new ThreadMain();
+//		threadMain =  new ThreadMain();
 		gameScene = new GameSceneController();
 		menuBtn = new ArrayList<>();
 		mainPane = new AnchorPane();
@@ -63,20 +63,15 @@ public class StartSceneController extends Controller {
 		
 	}
 
-	public StartSceneController(String fXMLPath, Controller controllerCaller) {
-		super(fXMLPath, controllerCaller);
-		// TODO Auto-generated constructor stub
-		mainPane = new AnchorPane();
-		mainScene = new Scene(mainPane, WIDTH, HEIGHT);
-		mainStage = new Stage();
-		mainStage.setScene(mainScene);
-	}
+//	public StartSceneController(String fXMLPath, Controller controllerCaller) {
+//		super(fXMLPath, controllerCaller);
+//		// TODO Auto-generated constructor stub
+//		mainPane = new AnchorPane();
+//		mainScene = new Scene(mainPane, WIDTH, HEIGHT);
+//		mainStage = new Stage();
+//		mainStage.setScene(mainScene);
+//	}
 
-	@Override
-	public void setSceneManager(SceneManager scenemanager) {
-		// TODO Auto-generated method stub
-
-	}
 
 	public static Stage getMainStage() {
 		return mainStage;

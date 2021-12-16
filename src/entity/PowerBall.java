@@ -21,7 +21,6 @@ public abstract class PowerBall {
 		speedY = 0;
 		isInMap = true;
 		setAttack(false);
-		this.playerSide = playerSide;
 		// TODO Auto-generated constructor stub
 	}
 

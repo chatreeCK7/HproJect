@@ -8,12 +8,12 @@ import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
 public class EarthBall extends PowerBall {
-	private static final Image EarthBall = new Image("/entity/res/earthBall.gif");
+	private static final Image EARTHBALL = new Image("/entity/res/earthBall.gif");
 	private double Height;
 	private double Width;
 	public EarthBall(int x, int highLevel, int playerSide) {
 		super(x, highLevel, playerSide);
-		imageView = new ImageView(EarthBall);
+		imageView = new ImageView(EARTHBALL);
 		Height = imageView.prefHeight(1);
 		Width = imageView.prefWidth(1);
 	}
@@ -34,7 +34,7 @@ public class EarthBall extends PowerBall {
 	}
 
 	public static Image getEarthball() {
-		return EarthBall;
+		return EARTHBALL;
 	}
 
 	@Override

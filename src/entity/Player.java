@@ -6,10 +6,7 @@ import javafx.scene.input.KeyCode;
 
 public class Player extends Entity{
 	
-	private static ObservableList<Player> playerList;
-	
 	private final int hp = 100;
-	private int playerPosX ;
 	private int playerPosY;
 	
 	private KeyCode keyMove;
