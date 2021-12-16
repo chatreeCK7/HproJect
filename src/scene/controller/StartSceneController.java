@@ -36,6 +36,7 @@ public class StartSceneController {
 			ClassLoader.getSystemResource("scene/controller/res/starting.wav").toString());
 
 	private StartSubScene startSubScene;
+
 	private List<HaDozButton> menuBtn;
 
 	public StartSceneController() {
@@ -53,6 +54,7 @@ public class StartSceneController {
 		createBackground();
 		createLogo();
 		createSubScene();
+
 	}
 
 	public static Stage getMainStage() {

@@ -7,8 +7,7 @@ import javafx.scene.image.ImageView;
 import scene.controller.GameSceneController;
 
 public class ThreadMain {
-	private static final Image EMPTY = new Image("/scene/controller/res/EMPTY Sprite.png");
-	private boolean isBoomTrigger;
+	private static final Image Empty = new Image("/scene/controller/res/Empty Sprite.png");
 	private Item mainItem;
 	private static int xTopLaneKen;
 	private static int xMidLaneKen;
@@ -22,12 +21,12 @@ public class ThreadMain {
 	private static PowerBall topBallRyu;
 	private static PowerBall midBallRyu;
 	private static PowerBall bottomBallRyu;
-
-	public ThreadMain() {
-		isBoomTrigger = true;
+	
+	public ThreadMain(){
+		
 	}
 
-	public void initalizeNewBallKen(PowerBall ball) {
+	public void initalizeNewPlayer1(PowerBall ball) {
 		new Thread(() -> {
 			xKenInit();
 			xRyuInit();
@@ -35,7 +34,7 @@ public class ThreadMain {
 		}).start();
 	}
 
-	public void initalizeNewBallRyu(PowerBall ball) {
+	public void initalizeNewPlayer2(PowerBall ball) {
 		new Thread(() -> {
 			xKenInit();
 			xRyuInit();
@@ -66,7 +65,7 @@ public class ThreadMain {
 						ImageView im = (ball).getImageView();
 						im.relocate((double) (-1), (double) -800);
 						ball.setInMap(false);
-						ImageView temp = new ImageView(EMPTY);
+						ImageView temp = new ImageView(Empty);
 						ball.setImageView(temp);
 						xKenInit();
 					}
@@ -112,7 +111,7 @@ public class ThreadMain {
 						ImageView im = (ball).getImageView();
 						im.relocate((double) (-1), (double) -800);
 						ball.setInMap(false);
-						ImageView temp = new ImageView(EMPTY);
+						ImageView temp = new ImageView(Empty);
 						ball.setImageView(temp);
 						xRyuInit();
 					}
@@ -167,31 +166,35 @@ public class ThreadMain {
 	public void BooMMM(PowerBall BallKen, PowerBall BallRyu) {
 		if (BallKen.getElement().equals(PowerBallType.EARTH) && BallRyu.getElement().equals(PowerBallType.WATER)) {
 			BallKen.setCount(BallKen.getCount() + 5);
-		} else if (BallKen.getElement().equals(PowerBallType.WATER)	&& BallRyu.getElement().equals(PowerBallType.EARTH)) {
+		} else if (BallKen.getElement().equals(PowerBallType.WATER)
+				&& BallRyu.getElement().equals(PowerBallType.EARTH)) {
 			BallRyu.setCount(BallRyu.getCount() + 5);
-		} else if (BallKen.getElement().equals(PowerBallType.WATER)	&& BallRyu.getElement().equals(PowerBallType.FIRE)) {
+		} else if (BallKen.getElement().equals(PowerBallType.WATER)
+				&& BallRyu.getElement().equals(PowerBallType.FIRE)) {
 			BallKen.setCount(BallKen.getCount() + 5);
-		} else if (BallKen.getElement().equals(PowerBallType.FIRE) 	&& BallRyu.getElement().equals(PowerBallType.WATER)) {
+		} else if (BallKen.getElement().equals(PowerBallType.FIRE)
+				&& BallRyu.getElement().equals(PowerBallType.WATER)) {
 			BallRyu.setCount(BallRyu.getCount() + 5);
-		} else if (BallKen.getElement().equals(PowerBallType.FIRE)	&& BallRyu.getElement().equals(PowerBallType.EARTH)) {
+		} else if (BallKen.getElement().equals(PowerBallType.FIRE)
+				&& BallRyu.getElement().equals(PowerBallType.EARTH)) {
 			BallKen.setCount(BallKen.getCount() + 5);
-		} else if (BallKen.getElement().equals(PowerBallType.EARTH)	&& BallRyu.getElement().equals(PowerBallType.FIRE)) {
+		} else if (BallKen.getElement().equals(PowerBallType.EARTH)
+				&& BallRyu.getElement().equals(PowerBallType.FIRE)) {
 			BallRyu.setCount(BallRyu.getCount() + 5);
 		}
 		isBoomBoth(BallRyu, BallKen);
 		isBoom(BallKen, BallRyu);
 		isBoom(BallRyu, BallKen);
-		isBoomTrigger = true;
 		Thread.currentThread().interrupt();
 	}
 
 	public void isBoom(PowerBall lossBall, PowerBall winBall) {
-		if (lossBall.getCount() < winBall.getCount() && isBoomTrigger) {
+		if (lossBall.getCount() < winBall.getCount()) {
 			winBall.setCount(winBall.getCount() - lossBall.getCount());
 			ImageView im = (lossBall).getImageView();
 			im.relocate((double) (-1), (double) -800);
 			lossBall.setInMap(false);
-			ImageView temp = new ImageView(EMPTY);
+			ImageView temp = new ImageView(Empty);
 			lossBall.setImageView(temp);
 			if (lossBall.getPlayerSide() < 0) {
 				xRyuInit();
@@ -201,7 +204,6 @@ public class ThreadMain {
 				lossBall.setX(-9999);
 			}
 			winBall.createFirstPowerBall(winBall.getCount());
-			isBoomTrigger = false;
 		}
 	}
 
@@ -212,16 +214,15 @@ public class ThreadMain {
 			ImageView im = (BallKen).getImageView();
 			im.relocate((double) (-1), (double) -800);
 			BallKen.setInMap(false);
-			ImageView temp = new ImageView(EMPTY);
+			ImageView temp = new ImageView(Empty);
 			BallKen.setImageView(temp);
 			BallKen.setX(-9999);
 			ImageView im2 = (BallRyu).getImageView();
 			im2.relocate((double) (-1), (double) -800);
 			BallRyu.setInMap(false);
-			ImageView temp2 = new ImageView(EMPTY);
+			ImageView temp2 = new ImageView(Empty);
 			BallRyu.setImageView(temp2);
 			BallRyu.setX(9999);
-			isBoomTrigger = false;
 		}
 	}
 

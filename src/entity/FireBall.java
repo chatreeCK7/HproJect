@@ -4,7 +4,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class FireBall extends PowerBall{
-	private static final Image FIREBALL= new Image("/entity/res/fireBall.png");
+	private static final Image FIREBALL = new Image("/entity/res/fireBall.png");
 	private double Height;
 	private double Width;
 	public FireBall(int x, int highLevel, int playerSide) {

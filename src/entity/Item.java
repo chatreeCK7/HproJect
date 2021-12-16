@@ -11,7 +11,7 @@ public class Item {
 
 	private String name;
 	private int itemLabel;
-	private int posX = 480;
+	private final int posX = 480;
 	private int posY;
 	private boolean isCollision;
 	private ImageView itemImage;

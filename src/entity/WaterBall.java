@@ -30,7 +30,7 @@ public class WaterBall extends PowerBall{
 		return imageView;
 	}
 
-	public static Image getWaterball() {
+	public static Image getWaterballl() {
 		return WATERBALL;
 	}
 
