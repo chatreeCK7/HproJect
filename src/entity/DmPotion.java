@@ -10,11 +10,7 @@ public class DmPotion extends Item implements Interactable {
 
 	public DmPotion() {
 		// TODO Auto-generated constructor stub
-	}
-
-	public DmPotion(String name, int Label) {
 		super("dmPotion", 2);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

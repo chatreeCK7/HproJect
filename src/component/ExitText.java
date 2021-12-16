@@ -19,10 +19,10 @@ public class ExitText extends Label {
 		setPadding(new Insets(40));
 		setText(text);
 		setWrapText(true);
-		setLabelfont(color);
+		setLabelFont(color);
 	}
 
-	private void setLabelfont(Paint color) {
+	private void setLabelFont(Paint color) {
 		// TODO Auto-generated method stub
 		try {
 			setFont(Font.loadFont(new FileInputStream(new File(FONT_PATH)), 32));
