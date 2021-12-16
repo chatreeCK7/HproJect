@@ -1,34 +1,23 @@
 package scene.controller;
 
-import scene.manager.SceneManager;
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.*;
 import application.ThreadMain;
 import component.CountLabel;
 import component.HpBar;
+import component.ShieldBar;
 import entity.*;
-import javafx.application.Application;
 import javafx.event.EventHandler;
-import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.scene.media.AudioClip;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class GameSceneController {
 	private static final Image BACKGROUND = new Image("/scene/controller/res/Background1.png");
+
 	private static final Image KEN = new Image("/scene/controller/res/ken_player.gif");
 	private static final Image RYU = new Image("/scene/controller/res/ryu_player.gif");
 	private static final String FONT_PATH = "/scene/controller/res/PressStart2P-vaV7.ttf";
@@ -45,20 +34,21 @@ public class GameSceneController {
 	private static int kenPosY;
 	private int ryuPosX = 900;
 	private static int ryuPosY;
+
+	private static boolean playSound = true;
+	private static HpBar kenHpBar, ryuHpBar;
 	private static int kenHp = 100, ryuHp = 100;
-	private static boolean isKenShielded = false,isRyuShielded = false;
-	private static HpBar kenHpBar;
-	private static HpBar ryuHpBar;
-	private static boolean isKenDie = false;
-	private static boolean isRyuDie = false;
+	private static ShieldBar kenShielded, ryuShielded;
+	private static boolean isKenShielded = false, isRyuShielded = false;
+	private static boolean isKenDie = false, isRyuDie = false;
 
 	private static AudioClip sceneSound;
 	private static Item mainItem;
 
-	private static AnchorPane mainPane;
 	private Scene mainScene;
-	private static Stage mainStage;
 	private ThreadMain threadMain;
+	private static Stage mainStage;
+	private static AnchorPane mainPane;
 	private static RyuEndingSceneController ryuEndingScene;
 	private static KenEndingSceneController kenEndingScene;
 	private ImageView firePicRyu = new ImageView(entity.FireBall.getFireballl());
@@ -69,16 +59,18 @@ public class GameSceneController {
 	private ImageView EarthPicKen = new ImageView(entity.EarthBall.getEarthball());
 	private ImageView WaterPicKen = new ImageView(entity.WaterBall.getWaterball());
 
-	Canvas canvas = new Canvas();
-	GraphicsContext ctx = canvas.getGraphicsContext2D();
 	private static CountLabel txtCount1, txtCount2;
 	boolean trigger = false;
 
+	/*
+	 * ================================================ Constructor
+	 * ================================================
+	 */
 	public GameSceneController() {
 		// TODO Auto-generated constructor stub
 		sceneSound = new AudioClip(ClassLoader.getSystemResource("scene/controller/res/BG_sound.wav").toString());
 //		runBackgroundSound();
-		
+
 		ryuEndingScene = new RyuEndingSceneController();
 		kenEndingScene = new KenEndingSceneController();
 		threadMain = new ThreadMain();
@@ -93,6 +85,8 @@ public class GameSceneController {
 		initializePlayer();
 		initializeNextBallBar();
 		setClickedCountedFont();
+		createKenShieldBar();
+		createRyuShieldBar();
 		mainItem = new Item();
 		mainItem.respawnItem();
 		createKenHpBar(getKenHp());
@@ -104,8 +98,13 @@ public class GameSceneController {
 //		System.exit(0);
 	}
 
+	/*
+	 * ================================================ Method
+	 * ================================================
+	 */
+
 	public void setOnCharged() {
-		
+
 		mainScene.setOnKeyPressed((KeyEvent e) -> {
 			String new_code = e.getCode().toString();
 //			System.out.println(new_code);
@@ -219,12 +218,6 @@ public class GameSceneController {
 		});
 	}
 
-	public void setClickedCountedFont() {
-		txtCount1.relocate(20, 10);
-		txtCount2.relocate(570, 10);
-		mainPane.getChildren().addAll(txtCount1, txtCount2);
-	}
-
 	protected void drawBackground() {
 		ImageView backgroundImgView = new ImageView(BACKGROUND);
 		mainPane.getChildren().add(backgroundImgView);
@@ -236,13 +229,12 @@ public class GameSceneController {
 		itemImage.relocate(mainItem.getPosX(), mainItem.randomPosY());
 		mainPane.getChildren().add(itemImage);
 	}
-	
+
 	public static void itemGotCatched() {
 		mainPane.getChildren().remove(getMainItem().getItemImage());
 		getMainItem().getItemImage().relocate((double) (-100), (double) (-100));
 	}
-	
-	
+
 	protected void initializePlayer() {
 		kenn = new ImageView(KEN);
 //        removeFromPane(kenn);
@@ -343,40 +335,46 @@ public class GameSceneController {
 		if (ball.getPlayerSide() < 0) { // Ryu attack
 			if (ball.getX() == 0 && !ball.isAttack()) {
 				int damage = (int) (ball.getCount() * 0.75);
-				if(!isKenShielded) {
+				if (!isKenShielded) {
 					setKenHp(getKenHp() - damage);
 					setKenHpText(getKenHp());
-				}else {
+				} else {
 					setKenShielded(false);
+					setKenShieldText(false);
 				}
 				if (getKenHp() <= 0)
 					setKenDie(true);
-				if (isKenDie()) {	//End Game
+
+				if (isKenDie() && playSound) { // End Game
 //					System.out.println(Thread.currentThread());
 					sceneSound.stop();
 					Thread.currentThread().interrupt();
+					getRyuEndingScene().playSound();
 					switchScenes(getRyuEndingScene().getMainScene());
-//					mainStage.close();
+					playSound = false;
 				}
 				ball.setAttack(true);
 			}
 		} else if (ball.getPlayerSide() > 0) { // Ken attack
 			if (ball.getX() == 1080 && !ball.isAttack()) {
 				int damage = (int) (ball.getCount() * 0.75);
-				if(!isRyuShielded) {
+				if (!isRyuShielded) {
 					setRyuHp(getRyuHp() - damage);
 					setRyuHpText(getRyuHp());
-				}else {
+				} else {
 					setRyuShielded(false);
+					setRyuShieldText(false);
 				}
 				if (getRyuHp() <= 0)
 					setRyuDie(true);
-				if (isRyuDie()) {	//End Game
+
+				if (isRyuDie() && playSound) { // End Game
 //					System.out.print(Thread.currentThread());
 					sceneSound.stop();
 					Thread.currentThread().interrupt();
+					getKenEndingScene().playSound();
 					switchScenes(getKenEndingScene().getMainScene());
-//					mainStage.close();
+					playSound = false;
 				}
 				ball.setAttack(true);
 			}
@@ -393,6 +391,18 @@ public class GameSceneController {
 		getSceneSound().setCycleCount(100);
 		getSceneSound().setVolume(10);
 		getSceneSound().play();
+	}
+
+	public void createKenShieldBar() {
+		kenShielded = new ShieldBar("not shield");
+		kenShielded.relocate(20, 35);
+		mainPane.getChildren().add(kenShielded);
+	}
+
+	public void createRyuShieldBar() {
+		ryuShielded = new ShieldBar("not shield");
+		ryuShielded.relocate(570, 35);
+		mainPane.getChildren().add(ryuShielded);
 	}
 
 	public static void createKenHpBar(int khp) {
@@ -415,15 +425,30 @@ public class GameSceneController {
 		ryuHpBar.setText(Integer.toString(rhp) + " hp");
 	}
 
+	public static void setKenShieldText(boolean kshield) {
+		if (kshield)
+			kenShielded.setText("shielded !");
+		else
+			kenShielded.setText("not shield");
+	}
+
+	public static void setRyuShieldText(boolean rshield) {
+		if (rshield)
+			ryuShielded.setText("shielded !");
+		else
+			ryuShielded.setText("not shield");
+	}
+
 	public static void updateCount(int count1, int count2) {
 		txtCount1.setText("Power " + Integer.toString(count1));
 		txtCount2.setText("Power " + Integer.toString(count2));
 
 	}
 
-	public void runBackgroundSound() {
-		while (true)
-			this.sceneSound.play();
+	public void setClickedCountedFont() {
+		txtCount1.relocate(20, 10);
+		txtCount2.relocate(570, 10);
+		mainPane.getChildren().addAll(txtCount1, txtCount2);
 	}
 
 	public int randomBall() { // 0=fireBall,1=earthBall,2=waterBall;
@@ -431,6 +456,11 @@ public class GameSceneController {
 		int r = rand.nextInt(3);
 		return r;
 	}
+
+	/*
+	 * ================================================ Getter & Setter
+	 * ================================================
+	 */
 
 	public static Image getBackground() {
 		return BACKGROUND;
@@ -519,8 +549,7 @@ public class GameSceneController {
 	public static void setRyuHp(int ryuHp) {
 		GameSceneController.ryuHp = (ryuHp < 0 || ryuHp > 100) ? (ryuHp < 0 ? 0 : 100) : ryuHp;
 	}
-	
-	
+
 	public static boolean isKenShielded() {
 		return isKenShielded;
 	}
@@ -594,7 +623,7 @@ public class GameSceneController {
 	}
 
 	public void setSceneSound(AudioClip sceneSound) {
-		this.sceneSound = sceneSound;
+		GameSceneController.sceneSound = sceneSound;
 	}
 
 }
